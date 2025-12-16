@@ -1,0 +1,124 @@
+BiocManager::install("GeuvadisTranscriptExpr")
+n
+library(GeuvadisTranscriptExpr)
+ls(2)
+data(counts)
+head(counts)
+dim(counts)
+?counts
+     library(rtracklayer)
+     data_dir <- system.file("extdata", package = "GeuvadisTranscriptExpr")
+     
+     gene_id_subset <- readLines(file.path(data_dir, "gene_id_subset.txt"))
+     snp_id_subset <- readLines(file.path(data_dir, "snp_id_subset.txt"))
+     
+     # Load gene ranges with names!
+     gene_ranges <- import(file.path(data_dir, "genes_chr19.bed"))
+     names(gene_ranges) <- mcols(gene_ranges)$name
+     
+     gene_ranges <- gene_ranges[gene_id_subset, ]
+     
+     # Load transcript counts
+     counts <- read.table(file.path(data_dir, "TrQuantCount_CEU_chr19.tsv"),
+                          header = TRUE, sep = "\t", as.is = TRUE)
+dim(counts)
+gene_ranges
+length(gene_ranges)
+gene_id_subset
+search()
+ls(10)
+?genotypes
+genotypes[1:4,1:4]
+genotypes[1:4,1:8]
+counts[1:4,1:4]
+table(table(counts$Gene_Symbol))
+dim(genotypes)
+dim(counts)
+library(SummarizedExperiment)
+head(gene_ranges)
+length(gene_ranges
+0)
+length(gene_ranges)
+length(transcript_ranges)
+ls()
+search()
+counts[1:4,1:4]
+library(SummarizedExperiment)
+x = SummarizedExperiment(counts=data.matrix(counts[,-c(1:2)])
+)
+0
+x = SummarizedExperiment(SimpleList(counts=data.matrix(counts[,-c(1:2)]))
+)
+x
+rowData(counts) = counts[,1:2]
+rowData(counts) = DataFrame(counts[,1:2])
+rowData(x) = DataFrame(counts[,1:2])
+x
+ls()
+genotypes[1:3,1:3]
+genotypes[1:3,1:8]
+dm = data.matrix(genotypes[,-c(1:4)])
+dm[,1:4]
+dm[1:4,1:4]
+dm = t(data.matrix(genotypes[,-c(1:4)]))
+dm[1:4,1:4]
+dim(dm)
+dim(x)
+assay(x[1:3,1:4])
+all.equal(rownames(dm), colnames(assay(x)))
+colData(x) = DataFrame(as.data.frame(dm))
+x
+genotypes[1:3,1:4]
+names(colData(x)) = genotypes$snpId
+x
+sl = genotypes[,1:3]
+rownames(sl) = genotypes[,4]
+head(sl)
+metadata(x) = list(snplocs=sl)
+object.size(x)
+geuvSE = x
+save(geuvSE, file="geuvSE.rda")
+savehistory(file="makegeuvSE.hist.txt")
+getwd()
+library(EnsDb.Hsapiens.v79)
+tx = transcript(EnsDb.Hsapiens.v79)
+tx = transcripts(EnsDb.Hsapiens.v79)
+tx
+x
+head(rowData(x))\
+head(rowData(x))
+rn = gsub("\\.", "", rowData(x)$TargetID)
+head(rn)
+tt = tx[rn]
+setdiff(names(tx), rn)
+intersect(rn,names(tx))
+rn[1:5]
+nchar(names(tx))[1:5]
+nchar(rn)[1:5]
+rn = gsub("\\..$", "", rowData(x)$TargetID)
+tt = tx[rn]
+setdiff(rn, names(tx))
+nchar(rn)[1:5]
+names(tx)[1:5]
+tx[rn[1]]
+tt = tx[rn]
+ii = intersect(names(tx), rn)
+length(ii)
+dim(rn)
+length(rn)
+x[ii,]
+x
+rownames(x) = rn
+x[ii,]
+xok = x[ii,]
+rowRanges(xok) = tx[rownames(xok)]
+xok
+rowRanges(xok)
+geuv19 = xok
+geuv19
+ls()
+geuvSE
+metadata(geuv19) = metadata(geuvSE) 
+geuv19
+save(geuv19, file="geuv19.rda")
+savehistory(file="dogeuv19.hist.txt")
