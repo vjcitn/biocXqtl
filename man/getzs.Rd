@@ -5,12 +5,19 @@
 \title{create a matrix of Z statistics for an additive effect of rare allele count in calls on molecular
 phenotype in molec}
 \usage{
-getzs(molec, calls)
+getzs(
+  molec,
+  calls,
+  statfun = function(x, y) RcppEigen::fastLmPure(X = x, y = y)
+)
 }
 \arguments{
 \item{molec}{numeric matrix of molecular phenotype values, columns are samples}
 
 \item{calls}{numeric matrix of rare allele counts, rows are samples, columns are loci}
+
+\item{statfun}{a function with arguments x, y, with the intention that x is a design matrix
+lacking a column of 1s and y is a response vector with nrow(x) elements.}
 }
 \value{
 A matrix with one row per
@@ -25,8 +32,22 @@ For a SNP with MAF 0, NA is returned.
 \examples{
 data(geuv19)
 mol = assay(geuv19)
+sds = rowSds(mol)
+mol = mol[which(sds>0), ] # drop constant features
 calls = data.matrix(as.data.frame(colData(geuv19)))
+csds = apply(calls,2,sd, na.rm=TRUE)
 m = maf(calls)
-allz = getzs(mol[1:100,], calls[,m>.3])
+allz = getzs(mol[1:100,], calls[,m>.3 & csds>0])
 summary(as.numeric(allz))
+\donttest{  # 90 sec?
+if (requireNamespace("MASS")) {
+nbz = function(x,y) { 
+   f = try(MASS::glm.nb(y~x, data=data.frame(y=y, x=x[,2])) )  # getzs adds column of 1s
+   if (inherits(f, "try-error")) return(list(coefficients=NA, se=NA))
+   dat = summary(f)$coefficients
+   list(coefficients=dat[,1], se=dat[,2])
+}  
+allz2 = suppressWarnings(getzs(mol[1:100,], calls[,m>.3 & csds>0], statfun = nbz))
+}
+}
 }

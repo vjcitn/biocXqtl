@@ -12,8 +12,8 @@ Description: This is a modular system for creating molecular QTL statistics.  Gi
 	responses like RNA-seq counts, and genotype calls in colData,
 	results of association tests will be bound into the rowData of 
 	the input RangedSummarizedExperiment.
-Depends: R (>= 4.0.0), tools, utils, SummarizedExperiment
-Suggests: knitr, BiocStyle, testthat, rmarkdown, beeswarm
+Depends: R (>= 4.4.0), utils, SummarizedExperiment
+Suggests: knitr, BiocStyle, testthat, rmarkdown, beeswarm, MASS
 Imports: RcppEigen
 License: Artistic-2.0
 VignetteBuilder: knitr
