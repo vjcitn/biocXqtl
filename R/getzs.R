@@ -18,15 +18,19 @@
 #' allz = getzs(mol[1:100,], calls[,m>.3 & csds>0])
 #' summary(as.numeric(allz))
 #' \donttest{  # 90 sec?
-#' if (requireNamespace("MASS")) {
-#' nbz = function(x,y) { 
+#'  if (requireNamespace("MASS")) {
+#'  nbz = function(x,y) { 
 #'    f = try(MASS::glm.nb(y~x, data=data.frame(y=y, x=x[,2])) )  # getzs adds column of 1s
 #'    if (inherits(f, "try-error")) return(list(coefficients=NA, se=NA))
 #'    dat = summary(f)$coefficients
 #'    list(coefficients=dat[,1], se=dat[,2])
-#' }  
-#' allz2 = suppressWarnings(getzs(mol[1:100,], calls[,m>.3 & csds>0], statfun = nbz))
-#' }
+#'  }  
+#'  # error messages will be thrown from glm ... we will silence them in later versions
+#'  # for now NA is noisily returned
+#'  allz2 = suppressWarnings(getzs(mol[1:100,], calls[,m>.3 & csds>0], statfun = nbz))
+#'  # do NB results differ substantially from OLS?
+#'  plot(allz2[1,], allz[1,], xlab="NB", ylab="OLS", main=sprintf("mQTL Zs for %s", rownames(mol)[1]))
+#'  }
 #' }
 #' @export
 getzs = function(molec, calls, statfun = function(x,y) RcppEigen::fastLmPure(X=x, y=y)) {
