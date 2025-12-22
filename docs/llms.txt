@@ -4,7 +4,18 @@
 
 <div class="section level1">
 
-molecular QTLs with bioconductor infrastructure
+Molecular QTLs with bioconductor infrastructure
+
+The purpose of this package is to facilitate statistical modeling to
+discover genotype-phenotype patterns like this one:
+
+<div class="figure">
+
+![](reference/figures/geuvbee.jpg)
+
+beeswarm
+
+</div>
 
 </div>
 
