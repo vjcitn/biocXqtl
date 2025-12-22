@@ -36,18 +36,24 @@ sds = rowSds(mol)
 mol = mol[which(sds>0), ] # drop constant features
 calls = data.matrix(as.data.frame(colData(geuv19)))
 csds = apply(calls,2,sd, na.rm=TRUE)
+mins = apply(calls,2,min, na.rm=TRUE)  # some snps include -1 values
 m = maf(calls)
-allz = getzs(mol[1:100,], calls[,m>.3 & csds>0])
+allz = getzs(mol[1:100,], calls[,m>.3 & csds>0 & mins > -1])
 summary(as.numeric(allz))
 \donttest{  # 90 sec?
-if (requireNamespace("MASS")) {
-nbz = function(x,y) { 
-   f = try(MASS::glm.nb(y~x, data=data.frame(y=y, x=x[,2])) )  # getzs adds column of 1s
-   if (inherits(f, "try-error")) return(list(coefficients=NA, se=NA))
+ if (requireNamespace("MASS")) {
+ nbz = function(x,y) { 
+ # error messages will be thrown from glm ... maybe condition to allow warning/error
+   f = tryCatch(MASS::glm.nb(y~x, data=data.frame(y=y, x=x[,2])), 
+            error=function(e) return(list(coefficients=NA, se=NA) ))  # getzs adds column of 1s
+   #if (inherits(f, "try-error")) return(list(coefficients=NA, se=NA))
    dat = summary(f)$coefficients
    list(coefficients=dat[,1], se=dat[,2])
-}  
-allz2 = suppressWarnings(getzs(mol[1:100,], calls[,m>.3 & csds>0], statfun = nbz))
-}
+ }  
+ # for now NA is noisily returned
+ allz2 = suppressWarnings(getzs(mol[1:100,], calls[,m>.3 & csds>0 & mins > -1], statfun = nbz))
+ # do NB results differ substantially from OLS?
+ plot(allz2[1,], allz[1,], xlab="NB", ylab="OLS", main=sprintf("txQTL Zs for \%s", rownames(mol)[1]))
+ }
 }
 }

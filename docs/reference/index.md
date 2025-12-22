@@ -16,6 +16,7 @@
     of rare allele count in calls on molecular phenotype in molec
 -   `geuv19` : a RangedSummarizedExperiment with data from
     GeuvadisTranscriptExpr
+-   `geuv19_samples` : data frame with sample information for geuv19
 -   `maf()` : simple function for MAF calculation
 
 </div>

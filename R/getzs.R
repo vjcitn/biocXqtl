@@ -14,22 +14,24 @@
 #' mol = mol[which(sds>0), ] # drop constant features
 #' calls = data.matrix(as.data.frame(colData(geuv19)))
 #' csds = apply(calls,2,sd, na.rm=TRUE)
+#' mins = apply(calls,2,min, na.rm=TRUE)  # some snps include -1 values
 #' m = maf(calls)
-#' allz = getzs(mol[1:100,], calls[,m>.3 & csds>0])
+#' allz = getzs(mol[1:100,], calls[,m>.3 & csds>0 & mins > -1])
 #' summary(as.numeric(allz))
 #' \donttest{  # 90 sec?
 #'  if (requireNamespace("MASS")) {
 #'  nbz = function(x,y) { 
-#'    f = try(MASS::glm.nb(y~x, data=data.frame(y=y, x=x[,2])) )  # getzs adds column of 1s
-#'    if (inherits(f, "try-error")) return(list(coefficients=NA, se=NA))
+#'  # error messages will be thrown from glm ... maybe condition to allow warning/error
+#'    f = tryCatch(MASS::glm.nb(y~x, data=data.frame(y=y, x=x[,2])), 
+#'             error=function(e) return(list(coefficients=NA, se=NA) ))  # getzs adds column of 1s
+#'    #if (inherits(f, "try-error")) return(list(coefficients=NA, se=NA))
 #'    dat = summary(f)$coefficients
 #'    list(coefficients=dat[,1], se=dat[,2])
 #'  }  
-#'  # error messages will be thrown from glm ... we will silence them in later versions
 #'  # for now NA is noisily returned
-#'  allz2 = suppressWarnings(getzs(mol[1:100,], calls[,m>.3 & csds>0], statfun = nbz))
+#'  allz2 = suppressWarnings(getzs(mol[1:100,], calls[,m>.3 & csds>0 & mins > -1], statfun = nbz))
 #'  # do NB results differ substantially from OLS?
-#'  plot(allz2[1,], allz[1,], xlab="NB", ylab="OLS", main=sprintf("mQTL Zs for %s", rownames(mol)[1]))
+#'  plot(allz2[1,], allz[1,], xlab="NB", ylab="OLS", main=sprintf("txQTL Zs for %s", rownames(mol)[1]))
 #'  }
 #' }
 #' @export
@@ -57,7 +59,8 @@ getzs = function(molec, calls, statfun = function(x,y) RcppEigen::fastLmPure(X=x
 #' data(geuv19)
 #' lk = geuv19[1:20,]
 #' mafs = maf(colData(lk)) # only snps here
-#' colData(lk) = colData(lk)[,which(mafs>.25)]
+#' mins = apply(data.matrix(as.data.frame(colData(lk))), 2, min, na.rm=TRUE) # some -1 values
+#' colData(lk) = colData(lk)[,which(mafs>.25 & mins > -1)]
 #' lk = bind_Zs(lk)
 #' head(rowRanges(lk)[,7])
 #' plpp2tx = as.numeric(assay(lk["ENST00000434325",]))

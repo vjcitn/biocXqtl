@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">biocXqtl</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,7 @@
       <h1>biocXqtl: flexible molecular QTL assessment</h1>
                         <h4 data-toc-skip class="author">Vincent J. Carey, stvjc at channing.harvard.edu</h4>
             
-            <h4 data-toc-skip class="date">December 16, 2025</h4>
+            <h4 data-toc-skip class="date">December 22, 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vjcitn/biocXqtl/blob/HEAD/vignettes/biocXqtl.Rmd"><code>vignettes/biocXqtl.Rmd</code></a></small>
       <div class="d-none name"><code>biocXqtl.Rmd</code></div>
@@ -72,8 +72,10 @@
 </h2>
 <p><code>geuv19</code> is a RangedSummarizedExperiment derived from the <a href="https://bioconductor.org/package/GeuvadisTranscriptExpr" class="external-link">GeuvadisTranscriptExpr</a> package. The assay component provides transcript level counts. Genotypes are available in the colData.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vjcitn" class="external-link">biocXqtl</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">geuv19</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vjcitn/biocXqtl">biocXqtl</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: package 'GenomicRanges' was built under R version 4.5.2</span></span></code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">geuv19</span><span class="op">)</span></span>
 <span><span class="va">geuv19</span></span></code></pre></div>
 <pre><code><span><span class="co">## class: RangedSummarizedExperiment </span></span>
 <span><span class="co">## dim: 4278 91 </span></span>
@@ -85,13 +87,13 @@
 <span><span class="co">## colnames(91): NA06984 NA06985 ... NA12889 NA12890</span></span>
 <span><span class="co">## colData names(1330): snp_19_1392636 snp_19_1393723 ... snp_19_58273441</span></span>
 <span><span class="co">##   snp_19_58274425</span></span></code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">geuv19</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                    NA06984 NA06985 NA06986 NA06989</span></span>
 <span><span class="co">## ENST00000545779 180.000000      40      58     172</span></span>
 <span><span class="co">## ENST00000408051   0.000000       0       0       0</span></span>
 <span><span class="co">## ENST00000318050   0.805323       0       0       0</span></span></code></pre>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">rowRanges</span><span class="op">(</span><span class="va">geuv19</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## GRanges object with 3 ranges and 6 metadata columns:</span></span>
 <span><span class="co">##                   seqnames            ranges strand |           tx_id</span></span>
@@ -111,7 +113,7 @@
 <span><span class="co">##   ENST00000318050 ENSG00000176695 ENST00000318050</span></span>
 <span><span class="co">##   -------</span></span>
 <span><span class="co">##   seqinfo: 319 sequences (1 circular) from GRCh38 genome</span></span></code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">geuv19</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## DataFrame with 3 rows and 4 columns</span></span>
 <span><span class="co">##         snp_19_1392636 snp_19_1393723 snp_19_1394530 snp_19_1396952</span></span>
@@ -120,9 +122,10 @@
 <span><span class="co">## NA06985              0              0              0              0</span></span>
 <span><span class="co">## NA06986              0              0              0              0</span></span></code></pre>
 <p>From a computational viewpoint, the simplest assessment of molecular QTLs involves fitting a linear model to assess additive association of minor allele dose with the molecular response. From an organizational viewpoint, a simple approach is to start and end with a RangedSummarizedExperiment instance. <code>bind_Zs</code> carries this out for the situation in which genotype calls are managed in a natural way in colData.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">=</span> <span class="fu"><a href="../reference/maf.html">maf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">geuv19</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">ok</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">m</span> <span class="op">&gt;</span> <span class="fl">.3</span><span class="op">)</span></span>
+<span><span class="va">mins</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.matrix.html" class="external-link">data.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">geuv19</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, <span class="fl">2</span>, <span class="va">min</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">ok</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">m</span> <span class="op">&gt;</span> <span class="fl">.3</span> <span class="op">&amp;</span> <span class="va">mins</span> <span class="op">&gt;</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span>   <span class="co"># very small sample size</span></span>
 <span><span class="va">limg</span> <span class="op">=</span> <span class="va">geuv19</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>,<span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">limg</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">limg</span><span class="op">)</span><span class="op">[</span>,<span class="va">ok</span><span class="op">]</span></span>
 <span><span class="va">limg</span> <span class="op">=</span> <span class="fu"><a href="../reference/bind_Zs.html">bind_Zs</a></span><span class="op">(</span><span class="va">limg</span>, </span>
@@ -134,19 +137,19 @@
 <span><span class="co">## assays(1): counts</span></span>
 <span><span class="co">## rownames(100): ENST00000545779 ENST00000408051 ... ENST00000313093</span></span>
 <span><span class="co">##   ENST00000543365</span></span>
-<span><span class="co">## rowData names(243): tx_id tx_biotype ... snp_19_58269173</span></span>
+<span><span class="co">## rowData names(241): tx_id tx_biotype ... snp_19_58269173</span></span>
 <span><span class="co">##   snp_19_58274425</span></span>
 <span><span class="co">## colnames(91): NA06984 NA06985 ... NA12889 NA12890</span></span>
-<span><span class="co">## colData names(237): snp_19_1400679 snp_19_1400766 ... snp_19_58269173</span></span>
+<span><span class="co">## colData names(235): snp_19_1400679 snp_19_1400766 ... snp_19_58269173</span></span>
 <span><span class="co">##   snp_19_58274425</span></span></code></pre>
 <p>All the Z-scores for tests of association are in the rowRanges of <code>limg</code>. The first 6 elements of the mcols of the rowRanges are related to annotation. A heatmap of the Z-scores shows a band of transcripts with all zero counts. Very light tiles correspond to negative Z-scores, dark tiles to positive.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">zs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.matrix.html" class="external-link">data.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">mcols</span><span class="op">(</span><span class="fu">rowRanges</span><span class="op">(</span><span class="va">limg</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>,<span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">zs</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">zs</span><span class="op">)</span><span class="op">]</span> <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/heatmap.html" class="external-link">heatmap</a></span><span class="op">(</span><span class="va">zs</span>, Colv<span class="op">=</span><span class="cn">NA</span>, scale<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="biocXqtl_files/figure-html/lklll-1.png" class="r-plt" width="700"></p>
 <p>With some helper functions, the basic data layout can be seen, illustrating inappropriateness standard linear modeling assumptions underlying interpretation of the Z-score.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mo</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">limg</span><span class="op">[</span><span class="va">x</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">sn</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">limg</span><span class="op">)</span><span class="op">[</span>,<span class="va">x</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu">beeswarm</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/beeswarm/man/beeswarm.html" class="external-link">beeswarm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/jitter.html" class="external-link">jitter</a></span><span class="op">(</span><span class="fu">mo</span><span class="op">(</span><span class="st">"ENST00000529442"</span><span class="op">)</span><span class="op">)</span><span class="op">~</span><span class="fu">sn</span><span class="op">(</span><span class="st">"snp_19_19631444"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>

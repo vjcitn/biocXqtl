@@ -18,7 +18,8 @@ bind a matrix of Z statistics created with getzs to the rowRanges of a Summarize
 data(geuv19)
 lk = geuv19[1:20,]
 mafs = maf(colData(lk)) # only snps here
-colData(lk) = colData(lk)[,which(mafs>.25)]
+mins = apply(data.matrix(as.data.frame(colData(lk))), 2, min, na.rm=TRUE) # some -1 values
+colData(lk) = colData(lk)[,which(mafs>.25 & mins > -1)]
 lk = bind_Zs(lk)
 head(rowRanges(lk)[,7])
 plpp2tx = as.numeric(assay(lk["ENST00000434325",]))

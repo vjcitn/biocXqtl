@@ -31,6 +31,15 @@ are available in the colData.
 
 ``` r
 library(biocXqtl)
+```
+
+</div>
+
+    ## Warning: package 'GenomicRanges' was built under R version 4.5.2
+
+<div id="cb3" class="sourceCode">
+
+``` r
 data(geuv19)
 geuv19
 ```
@@ -48,7 +57,7 @@ geuv19
     ## colData names(1330): snp_19_1392636 snp_19_1393723 ... snp_19_58273441
     ##   snp_19_58274425
 
-<div id="cb3" class="sourceCode">
+<div id="cb5" class="sourceCode">
 
 ``` r
 assay(geuv19[1:3,1:4])
@@ -61,7 +70,7 @@ assay(geuv19[1:3,1:4])
     ## ENST00000408051   0.000000       0       0       0
     ## ENST00000318050   0.805323       0       0       0
 
-<div id="cb5" class="sourceCode">
+<div id="cb7" class="sourceCode">
 
 ``` r
 rowRanges(geuv19[1:3,])
@@ -88,7 +97,7 @@ rowRanges(geuv19[1:3,])
     ##   -------
     ##   seqinfo: 319 sequences (1 circular) from GRCh38 genome
 
-<div id="cb7" class="sourceCode">
+<div id="cb9" class="sourceCode">
 
 ``` r
 colData(geuv19)[1:3,1:4]
@@ -111,11 +120,12 @@ RangedSummarizedExperiment instance. `bind_Zs` carries this out for the
 situation in which genotype calls are managed in a natural way in
 colData.
 
-<div id="cb9" class="sourceCode">
+<div id="cb11" class="sourceCode">
 
 ``` r
 m = maf(colData(geuv19))
-ok = which(m > .3)
+mins = apply(data.matrix(as.data.frame(colData(geuv19))), 2, min, na.rm=TRUE)
+ok = which(m > .3 & mins > -1)   # very small sample size
 limg = geuv19[1:100,]
 colData(limg) = colData(limg)[,ok]
 limg = bind_Zs(limg, 
@@ -131,10 +141,10 @@ limg
     ## assays(1): counts
     ## rownames(100): ENST00000545779 ENST00000408051 ... ENST00000313093
     ##   ENST00000543365
-    ## rowData names(243): tx_id tx_biotype ... snp_19_58269173
+    ## rowData names(241): tx_id tx_biotype ... snp_19_58269173
     ##   snp_19_58274425
     ## colnames(91): NA06984 NA06985 ... NA12889 NA12890
-    ## colData names(237): snp_19_1400679 snp_19_1400766 ... snp_19_58269173
+    ## colData names(235): snp_19_1400679 snp_19_1400766 ... snp_19_58269173
     ##   snp_19_58274425
 
 All the Z-scores for tests of association are in the rowRanges of
@@ -143,7 +153,7 @@ to annotation. A heatmap of the Z-scores shows a band of transcripts
 with all zero counts. Very light tiles correspond to negative Z-scores,
 dark tiles to positive.
 
-<div id="cb11" class="sourceCode">
+<div id="cb13" class="sourceCode">
 
 ``` r
 zs = data.matrix(as.data.frame(mcols(rowRanges(limg))[,-c(1:6)]))
@@ -159,7 +169,7 @@ With some helper functions, the basic data layout can be seen,
 illustrating inappropriateness standard linear modeling assumptions
 underlying interpretation of the Z-score.
 
-<div id="cb12" class="sourceCode">
+<div id="cb14" class="sourceCode">
 
 ``` r
 mo = function(x) as.numeric(assay(limg[x,]))

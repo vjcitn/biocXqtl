@@ -49,7 +49,8 @@ bind_Zs(se, colselector = function(se) 1:10)
 data(geuv19)
 lk = geuv19[1:20,]
 mafs = maf(colData(lk)) # only snps here
-colData(lk) = colData(lk)[,which(mafs>.25)]
+mins = apply(data.matrix(as.data.frame(colData(lk))), 2, min, na.rm=TRUE) # some -1 values
+colData(lk) = colData(lk)[,which(mafs>.25 & mins > -1)]
 lk = bind_Zs(lk)
 head(rowRanges(lk)[,7])
 #> GRanges object with 6 ranges and 1 metadata column:

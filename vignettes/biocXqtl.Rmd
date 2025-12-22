@@ -58,7 +58,8 @@ managed in a natural way in colData.
 
 ```{r do2}
 m = maf(colData(geuv19))
-ok = which(m > .3)
+mins = apply(data.matrix(as.data.frame(colData(geuv19))), 2, min, na.rm=TRUE)
+ok = which(m > .3 & mins > -1)   # very small sample size
 limg = geuv19[1:100,]
 colData(limg) = colData(limg)[,ok]
 limg = bind_Zs(limg, 

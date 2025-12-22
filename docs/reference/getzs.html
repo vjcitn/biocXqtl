@@ -9,7 +9,7 @@ phenotype in molec"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">biocXqtl</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,11 @@ phenotype in molec</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getzs</span><span class="op">(</span><span class="va">molec</span>, <span class="va">calls</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getzs</span><span class="op">(</span></span>
+<span>  <span class="va">molec</span>,</span>
+<span>  <span class="va">calls</span>,</span>
+<span>  statfun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="fu">RcppEigen</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppEigen/man/fastLm.html" class="external-link">fastLmPure</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -55,6 +59,11 @@ phenotype in molec</p>
 
 <dt id="arg-calls">calls<a class="anchor" aria-label="anchor" href="#arg-calls"></a></dt>
 <dd><p>numeric matrix of rare allele counts, rows are samples, columns are loci</p></dd>
+
+
+<dt id="arg-statfun">statfun<a class="anchor" aria-label="anchor" href="#arg-statfun"></a></dt>
+<dd><p>a function with arguments x, y, with the intention that x is a design matrix
+lacking a column of 1s and y is a response vector with nrow(x) elements.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -69,13 +78,35 @@ phenotype in molec</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">geuv19</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">mol</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">geuv19</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">calls</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.matrix.html" class="external-link">data.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">geuv19</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mol</span> <span class="op">=</span> <span class="fu">assay</span><span class="op">(</span><span class="va">geuv19</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sds</span> <span class="op">=</span> <span class="fu">rowSds</span><span class="op">(</span><span class="va">mol</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mol</span> <span class="op">=</span> <span class="va">mol</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">sds</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">)</span>, <span class="op">]</span> <span class="co"># drop constant features</span></span></span>
+<span class="r-in"><span><span class="va">calls</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.matrix.html" class="external-link">data.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">geuv19</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">csds</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">calls</span>,<span class="fl">2</span>,<span class="va">sd</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mins</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">calls</span>,<span class="fl">2</span>,<span class="va">min</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>  <span class="co"># some snps include -1 values</span></span></span>
 <span class="r-in"><span><span class="va">m</span> <span class="op">=</span> <span class="fu"><a href="maf.html">maf</a></span><span class="op">(</span><span class="va">calls</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">allz</span> <span class="op">=</span> <span class="fu">getzs</span><span class="op">(</span><span class="va">mol</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>,<span class="op">]</span>, <span class="va">calls</span><span class="op">[</span>,<span class="va">m</span><span class="op">&gt;</span><span class="fl">.3</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">allz</span> <span class="op">=</span> <span class="fu">getzs</span><span class="op">(</span><span class="va">mol</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>,<span class="op">]</span>, <span class="va">calls</span><span class="op">[</span>,<span class="va">m</span><span class="op">&gt;</span><span class="fl">.3</span> <span class="op">&amp;</span> <span class="va">csds</span><span class="op">&gt;</span><span class="fl">0</span> <span class="op">&amp;</span> <span class="va">mins</span> <span class="op">&gt;</span> <span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">allz</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -4.4767 -0.5831  0.1399  0.1047  0.7790  4.3300    1988 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -4.4767 -0.5657  0.1605  0.1210  0.7876  4.3300 </span>
+<span class="r-in"><span>  <span class="co"># 90 sec?</span></span></span>
+<span class="r-in"><span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"MASS"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span> <span class="va">nbz</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>,<span class="va">y</span><span class="op">)</span> <span class="op">{</span> </span></span>
+<span class="r-in"><span> <span class="co"># error messages will be thrown from glm ... maybe condition to allow warning/error</span></span></span>
+<span class="r-in"><span>   <span class="va">f</span> <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html" class="external-link">glm.nb</a></span><span class="op">(</span><span class="va">y</span><span class="op">~</span><span class="va">x</span>, data<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>y<span class="op">=</span><span class="va">y</span>, x<span class="op">=</span><span class="va">x</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>            error<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>coefficients<span class="op">=</span><span class="cn">NA</span>, se<span class="op">=</span><span class="cn">NA</span><span class="op">)</span> <span class="op">)</span><span class="op">)</span>  <span class="co"># getzs adds column of 1s</span></span></span>
+<span class="r-in"><span>   <span class="co">#if (inherits(f, "try-error")) return(list(coefficients=NA, se=NA))</span></span></span>
+<span class="r-in"><span>   <span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>coefficients<span class="op">=</span><span class="va">dat</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>, se<span class="op">=</span><span class="va">dat</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="op">}</span>  </span></span>
+<span class="r-in"><span> <span class="co"># for now NA is noisily returned</span></span></span>
+<span class="r-in"><span> <span class="va">allz2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">getzs</span><span class="op">(</span><span class="va">mol</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>,<span class="op">]</span>, <span class="va">calls</span><span class="op">[</span>,<span class="va">m</span><span class="op">&gt;</span><span class="fl">.3</span> <span class="op">&amp;</span> <span class="va">csds</span><span class="op">&gt;</span><span class="fl">0</span> <span class="op">&amp;</span> <span class="va">mins</span> <span class="op">&gt;</span> <span class="op">-</span><span class="fl">1</span><span class="op">]</span>, statfun <span class="op">=</span> <span class="va">nbz</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="co"># do NB results differ substantially from OLS?</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">allz2</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span>, <span class="va">allz</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span>, xlab<span class="op">=</span><span class="st">"NB"</span>, ylab<span class="op">=</span><span class="st">"OLS"</span>, main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"txQTL Zs for %s"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mol</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="op">}</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: MASS</span>
+<span class="r-plt img"><img src="getzs-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

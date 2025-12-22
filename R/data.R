@@ -7,3 +7,8 @@
 #' data(geuv19)
 #' rowRanges(geuv19[1:3,])
 "geuv19"
+
+#' data frame with sample information for geuv19
+#' @docType data
+#' @format data.frame
+"geuv19_samples"
