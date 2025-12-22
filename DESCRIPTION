@@ -14,7 +14,7 @@ Description: This is a modular system for creating molecular QTL statistics.  Gi
 	the input RangedSummarizedExperiment.
 Depends: R (>= 4.4.0), utils, SummarizedExperiment
 Suggests: knitr, BiocStyle, testthat, rmarkdown, beeswarm, MASS
-Imports: RcppEigen
+Imports: RcppEigen, tidyr, ggplot2, plotly
 License: Artistic-2.0
 VignetteBuilder: knitr
 biocViews: Infrastructure

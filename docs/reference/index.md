@@ -18,6 +18,8 @@
     GeuvadisTranscriptExpr
 -   `geuv19_samples` : data frame with sample information for geuv19
 -   `maf()` : simple function for MAF calculation
+-   `viz_stats()` : produce a plotly display of statistics of xQTL
+    association
 
 </div>
 

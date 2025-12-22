@@ -17,6 +17,18 @@ beeswarm
 
 </div>
 
+For a more comprehensive view of genotype-phenotype associations in a
+region, see the “Getting started” vignette for code producing a plotly
+display.
+
+<div class="figure">
+
+![](reference/figures/plotly.jpg)
+
+plotly display
+
+</div>
+
 </div>
 
 </div>

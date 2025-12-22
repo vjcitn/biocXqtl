@@ -17,6 +17,18 @@ beeswarm
 
 </div>
 
+For a more comprehensive view of genotype-phenotype associations in a
+region, see the “Getting started” vignette for code producing a plotly
+display.
+
+<div class="figure">
+
+![](reference/figures/plotly.jpg)
+
+plotly display
+
+</div>
+
 </div>
 
 </div>
@@ -41,6 +53,8 @@ beeswarm
     GeuvadisTranscriptExpr
 -   `geuv19_samples` : data frame with sample information for geuv19
 -   `maf()` : simple function for MAF calculation
+-   `viz_stats()` : produce a plotly display of statistics of xQTL
+    association
 
 </div>
 

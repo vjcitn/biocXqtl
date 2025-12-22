@@ -181,6 +181,34 @@ beeswarm::beeswarm(jitter(mo("ENST00000529442"))~sn("snp_19_19631444"))
 
 ![](biocXqtl_files/figure-html/lkda-1.png)
 
+An interactive comprehensive overview of filtered statistics can be
+made. For this illustration we start from scratch.
+
+<div id="cb15" class="sourceCode">
+
+``` r
+data(geuv19)
+sds = rowSds(assay(geuv19), na.rm=TRUE)
+qq = quantile(sds, .8)
+ok = which(sds > qq)
+lk = geuv19[ok,]
+mafs = maf(colData(lk)) # only snps here
+mins = apply(data.matrix(as.data.frame(colData(lk))), 2, min, na.rm=TRUE) # some -1 values
+colData(lk) = colData(lk)[,which(mafs>.25 & mins > -1)]
+lk <- bind_Zs(lk, colselector = function(se) colnames(colData(se)))
+viz_stats(lk)
+```
+
+</div>
+
+<div id="htmlwidget-ac96cb3ee4656e2e9ec3"
+class="plotly html-widget html-fill-item"
+style="width:700px;height:432.632880098888px;">
+
+</div>
+
+Zoom and axis restoration are available with standard plotly controls.
+
 </div>
 
 </div>
