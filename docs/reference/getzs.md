@@ -98,6 +98,7 @@ summary(as.numeric(allz))
  # do NB results differ substantially from OLS?
  plot(allz2[1,], allz[1,], xlab="NB", ylab="OLS", main=sprintf("txQTL Zs for %s", rownames(mol)[1]))
  }
+#> Loading required namespace: MASS
 
 ```
 
