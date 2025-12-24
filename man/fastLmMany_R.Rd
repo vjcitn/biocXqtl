@@ -19,3 +19,13 @@ List with coefficients and standard errors matrices
 \description{
 Fit multiple linear models with common design matrix
 }
+\examples{
+set.seed(123)  # thanks claude
+n <- 50
+p <- 3
+m <- 5
+X <- matrix(rnorm(n * p), n, p)
+Y <- matrix(rnorm(n * m), n, m)
+result <- fastLmMany_R(X, Y)
+str(result)
+}

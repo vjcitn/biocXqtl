@@ -23,7 +23,7 @@
 #' @export
 viz_stats = function(se, jitter_fac=500, ptcolor="blue", midchop=2,
    xlabel="SNP addr", ylabel="xQTL association Z") {
-  tt = rowData(lk)
+  tt = rowData(se)
   sn = colnames(tt)[-c(1:6)]
   addr = as.numeric(sapply(strsplit(sn, "_"), "[", 3))
   sndf = as.data.frame(tt[,-c(1:6)])

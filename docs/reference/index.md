@@ -12,6 +12,8 @@
 
 -   `bind_Zs()` : bind a matrix of Z statistics created with getzs to
     the rowRanges of a SummarizedExperiment
+-   `fastLmMany_R()` : Fit multiple linear models with common design
+    matrix
 -   `getzs()` : create a matrix of Z statistics for an additive effect
     of rare allele count in calls on molecular phenotype in molec
 -   `geuv19` : a RangedSummarizedExperiment with data from

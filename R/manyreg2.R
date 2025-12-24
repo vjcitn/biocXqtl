@@ -4,6 +4,7 @@
 #' @param Y Response matrix (n x m), each column is a separate response
 #' @param intercept Logical, add intercept column to X?
 #' @return List with coefficients and standard errors matrices
+#' @examples
 #' set.seed(123)  # thanks claude
 #' n <- 50
 #' p <- 3

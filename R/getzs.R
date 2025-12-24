@@ -4,9 +4,11 @@
 #' @param molec numeric matrix of molecular phenotype values, columns are samples
 #' @param calls numeric matrix of rare allele counts, rows are samples, columns are loci
 #' @param statfun a function with arguments x, y, with the intention that x is a design matrix
-#' lacking a column of 1s and y is a response vector with nrow(x) elements.
+#' lacking a column of 1s and y is a response vector with nrow(x) elements.  `statfun` must
+#' return a list with elements `coefficients` and `se`.  `getzs` processes the second element
+#' of each of these to form a Z-score, assuming that the first element corresponds to an intercept.
 #' @note For a SNP with MAF 0, NA is returned.
-#' @return A matrix with one row per
+#' @return A matrix with rows corresponding to molecular phenotype features and columns corresponding to SNPs
 #' @examples
 #' data(geuv19)
 #' mol = assay(geuv19)
