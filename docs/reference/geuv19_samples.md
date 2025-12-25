@@ -15,7 +15,7 @@ data frame with sample information for geuv19
 <div class="sourceCode">
 
 ``` r
-geuv19_samples
+data(geuv19_samples)
 ```
 
 </div>

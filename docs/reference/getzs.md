@@ -77,7 +77,7 @@ For a SNP with MAF 0, NA is returned.
 ``` r
 data(geuv19)
 mol = assay(geuv19)
-sds = rowSds(mol)
+sds = MatrixGenerics::rowSds(mol)
 mol = mol[which(sds>0), ] # drop constant features
 calls = data.matrix(as.data.frame(colData(geuv19)))
 csds = apply(calls,2,sd, na.rm=TRUE)

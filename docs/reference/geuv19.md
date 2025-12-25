@@ -15,7 +15,7 @@ a RangedSummarizedExperiment with data from GeuvadisTranscriptExpr
 <div class="sourceCode">
 
 ``` r
-geuv19
+data(geuv19)
 ```
 
 </div>

@@ -22,6 +22,8 @@
 -   `maf()` : simple function for MAF calculation
 -   `viz_stats()` : produce a plotly display of statistics of xQTL
     association
+-   `zs4manyYs()` : use procedure tailored to multiple responses for a
+    fixed design matrix
 
 </div>
 
