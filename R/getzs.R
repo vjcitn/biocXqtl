@@ -3,6 +3,7 @@
 #' @import RcppEigen
 #' @param molec numeric matrix of molecular phenotype values, columns are samples
 #' @param calls numeric matrix of rare allele counts, rows are samples, columns are loci
+#' @param covdf data.frame of additional covariates, to be modeled along with genotype
 #' @param statfun a function with arguments x, y, with the intention that x is a design matrix
 #' lacking a column of 1s and y is a response vector with nrow(x) elements.  `statfun` must
 #' return a list with elements `coefficients` and `se`.  `getzs` processes the second element
@@ -37,17 +38,18 @@
 #'  }
 #' }
 #' @export
-getzs = function(molec, calls, statfun = function(x,y) RcppEigen::fastLmPure(X=x, y=y)) {
+getzs = function(molec, calls, covdf = data.frame(), statfun = function(x,y) RcppEigen::fastLmPure(X=x, y=y)) {
    stopifnot(ncol(molec) == nrow(calls))
    nmolec = nrow(molec)
    ncalls = ncol(calls)
-   get1 = function(y) function(x) {
-     fit = try(statfun(cbind(1,x), y), silent=TRUE) #RcppEigen::fastLmPure(cbind(1.,x),y)
+   get1 = function(y, covdf) function(x) {
+     if (nrow(covdf)>0) x = cbind(x, data.matrix(covdf)) # genotype will always be second component of coeff
+     fit = try(statfun(cbind(1,x), y), silent=TRUE) 
      if (inherits(fit, "try-error")) return(NA) 
      if (any(is.na(fit$coefficients))) return(NA)
      fit$coefficients[2]/fit$se[2]
      }
-   prep = apply(molec,1,get1)
+   prep = apply(molec,1,get1,covdf=covdf)
    ans = apply(calls,2,function(x) sapply(prep, function(z) try(z(x))))
    rownames(ans) = rownames(molec)  # get rid of modifications
    ans
@@ -55,7 +57,9 @@ getzs = function(molec, calls, statfun = function(x,y) RcppEigen::fastLmPure(X=x
 
 #' bind a matrix of Z statistics created with getzs to the rowRanges of a SummarizedExperiment
 #' @import SummarizedExperiment
-#' @param se SummarizedExperiment assumed to have molecular phenotype data in assay
+#' @param se SummarizedExperiment assumed to have molecular phenotype data in assay.  A metadata
+#' component (list element) named nonCallVars will be checked and associated colData elements
+#' will be used as covariates in models for effect of dosage of minor allele
 #' @param colselector function with argument "se" returning indices of SNP genotypes in colData(se)
 #' @examples
 #' data(geuv19)
@@ -73,7 +77,10 @@ getzs = function(molec, calls, statfun = function(x,y) RcppEigen::fastLmPure(X=x
 bind_Zs = function(se, colselector = function(se) 1:10) {
   molec = as.matrix(assay(se))
   calls = data.matrix(colData(se)[, colselector(se)])
-  stats = getzs(molec, calls)
+  noncallvars = metadata(se)$nonCallVars
+  covdf = data.frame()
+  if (length(noncallvars)>0) covdf = as.data.frame(colData(se)[,noncallvars])
+  stats = getzs(molec, calls, covdf)
   stopifnot(all(rownames(stats) == rownames(se)))
   mcols(rowRanges(se)) = cbind(mcols(rowRanges(se)), stats)
   se

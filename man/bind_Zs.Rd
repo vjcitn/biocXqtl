@@ -7,7 +7,9 @@
 bind_Zs(se, colselector = function(se) 1:10)
 }
 \arguments{
-\item{se}{SummarizedExperiment assumed to have molecular phenotype data in assay}
+\item{se}{SummarizedExperiment assumed to have molecular phenotype data in assay.  A metadata
+component (list element) named nonCallVars will be checked and associated colData elements
+will be used as covariates in models for effect of dosage of minor allele}
 
 \item{colselector}{function with argument "se" returning indices of SNP genotypes in colData(se)}
 }

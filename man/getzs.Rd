@@ -8,6 +8,7 @@ phenotype in molec}
 getzs(
   molec,
   calls,
+  covdf = data.frame(),
   statfun = function(x, y) RcppEigen::fastLmPure(X = x, y = y)
 )
 }
@@ -15,6 +16,8 @@ getzs(
 \item{molec}{numeric matrix of molecular phenotype values, columns are samples}
 
 \item{calls}{numeric matrix of rare allele counts, rows are samples, columns are loci}
+
+\item{covdf}{data.frame of additional covariates, to be modeled along with genotype}
 
 \item{statfun}{a function with arguments x, y, with the intention that x is a design matrix
 lacking a column of 1s and y is a response vector with nrow(x) elements.  `statfun` must
