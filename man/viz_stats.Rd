@@ -31,7 +31,7 @@ produce a plotly display of statistics of xQTL association
 }
 \examples{
 data(geuv19)
-sds = rowSds(assay(geuv19), na.rm=TRUE)
+sds = MatrixGenerics::rowSds(assay(geuv19), na.rm=TRUE)
 qq = quantile(sds, .8)
 ok = which(sds > qq)
 lk = geuv19[ok,]

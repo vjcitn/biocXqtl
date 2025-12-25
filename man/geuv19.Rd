@@ -8,7 +8,7 @@
 RangedSummarizedExperiment
 }
 \usage{
-geuv19
+data(geuv19)
 }
 \description{
 a RangedSummarizedExperiment with data from GeuvadisTranscriptExpr

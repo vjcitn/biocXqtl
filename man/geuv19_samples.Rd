@@ -8,7 +8,7 @@
 data.frame
 }
 \usage{
-geuv19_samples
+data(geuv19_samples)
 }
 \description{
 data frame with sample information for geuv19

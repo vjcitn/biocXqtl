@@ -1,6 +1,6 @@
 Package: biocXqtl
 Title: modular system for creating molecular QTL statistics
-Version: 0.0.4001
+Version: 0.0.4002
 Authors@R:
     person(given = "Vince",
            family = "Carey",
@@ -14,8 +14,9 @@ Description: This is a modular system for creating molecular QTL statistics.  Gi
 	the input RangedSummarizedExperiment.
 Depends: R (>= 4.3.0), utils, SummarizedExperiment
 Suggests: knitr, BiocStyle, testthat, rmarkdown, beeswarm, MASS
-Imports: RcppEigen, tidyr, ggplot2, plotly, Rcpp
-License: Artistic-2.0
+Imports: RcppEigen, tidyr, ggplot2, plotly, Rcpp, BiocParallel,
+	MatrixGenerics
+License: MIT + file LICENSE
 VignetteBuilder: knitr
 biocViews: Infrastructure
 Encoding: UTF-8

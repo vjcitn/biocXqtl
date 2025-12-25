@@ -11,7 +11,7 @@
 #' @param ylabel axis label
 #' @examples
 #' data(geuv19)
-#' sds = rowSds(assay(geuv19), na.rm=TRUE)
+#' sds = MatrixGenerics::rowSds(assay(geuv19), na.rm=TRUE)
 #' qq = quantile(sds, .8)
 #' ok = which(sds > qq)
 #' lk = geuv19[ok,]
@@ -23,6 +23,7 @@
 #' @export
 viz_stats = function(se, jitter_fac=500, ptcolor="blue", midchop=2,
    xlabel="SNP addr", ylabel="xQTL association Z") {
+  feat <- name <- value <- NULL
   tt = rowData(se)
   sn = colnames(tt)[-c(1:6)]
   addr = as.numeric(sapply(strsplit(sn, "_"), "[", 3))
