@@ -19,6 +19,7 @@ count in calls on molecular phenotype in molec
 getzs(
   molec,
   calls,
+  covdf = data.frame(),
   statfun = function(x, y) RcppEigen::fastLmPure(X = x, y = y)
 )
 ```
@@ -39,6 +40,11 @@ getzs(
 
     numeric matrix of rare allele counts, rows are samples, columns are
     loci
+
+-   covdf:
+
+    data.frame of additional covariates, to be modeled along with
+    genotype
 
 -   statfun:
 
@@ -91,7 +97,7 @@ summary(as.numeric(allz))
  if (requireNamespace("MASS")) {
  nbz = function(x,y) { 
  # error messages will be thrown from glm ... maybe condition to allow warning/error
-   f = tryCatch(MASS::glm.nb(y~x, data=data.frame(y=y, x=x[,2])), 
+   f = tryCatch(MASS::glm.nb(y~x, data=data.frame(y=y, x=x[,-1])), # switch to -1 here to allow covariates
             error=function(e) return(list(coefficients=NA, se=NA) ))  # getzs adds column of 1s
    #if (inherits(f, "try-error")) return(list(coefficients=NA, se=NA))
    dat = summary(f)$coefficients

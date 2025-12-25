@@ -28,6 +28,8 @@ test_that("getzs with one covariate works", {
 })
 
 
+# note that the GeuvadisTranscriptExpr/geuv19 "counts" are expected counts from FluxCapacitor...
+# thus rounding is used below
 test_that("negative binomial fits work with covariate", { 
   nbz = function(x,y) {
   # error messages will be thrown from glm ... maybe condition to allow warning/error
@@ -37,9 +39,11 @@ test_that("negative binomial fits work with covariate", {
     dat = summary(f)$coefficients
     list(coefficients=dat[,1], se=dat[,2])
   } 
-   full = getzs(mol[1:10,], calls, covar, statfun=nbz) # includes sex adjustment
-   lit = summary(MASS::glm.nb(y~snp+Sex, data=litdf))
+   expect_warning({
+      full = getzs(round(mol[1:10,],0), calls, covar, statfun=nbz) # includes sex adjustment
+   })
+   lit = summary(MASS::glm.nb(round(y,0)~snp+Sex, data=litdf))
    expect_true(abs(full[1,1]-lit$coefficients[2,3])<1e-12)
-}
+})
 
 

@@ -45,6 +45,7 @@ phenotype in molec</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getzs</span><span class="op">(</span></span>
 <span>  <span class="va">molec</span>,</span>
 <span>  <span class="va">calls</span>,</span>
+<span>  covdf <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  statfun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="fu">RcppEigen</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RcppEigen/man/fastLm.html" class="external-link">fastLmPure</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -59,6 +60,10 @@ phenotype in molec</p>
 
 <dt id="arg-calls">calls<a class="anchor" aria-label="anchor" href="#arg-calls"></a></dt>
 <dd><p>numeric matrix of rare allele counts, rows are samples, columns are loci</p></dd>
+
+
+<dt id="arg-covdf">covdf<a class="anchor" aria-label="anchor" href="#arg-covdf"></a></dt>
+<dd><p>data.frame of additional covariates, to be modeled along with genotype</p></dd>
 
 
 <dt id="arg-statfun">statfun<a class="anchor" aria-label="anchor" href="#arg-statfun"></a></dt>
@@ -95,7 +100,7 @@ of each of these to form a Z-score, assuming that the first element corresponds 
 <span class="r-in"><span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"MASS"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span> <span class="va">nbz</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>,<span class="va">y</span><span class="op">)</span> <span class="op">{</span> </span></span>
 <span class="r-in"><span> <span class="co"># error messages will be thrown from glm ... maybe condition to allow warning/error</span></span></span>
-<span class="r-in"><span>   <span class="va">f</span> <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html" class="external-link">glm.nb</a></span><span class="op">(</span><span class="va">y</span><span class="op">~</span><span class="va">x</span>, data<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>y<span class="op">=</span><span class="va">y</span>, x<span class="op">=</span><span class="va">x</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>   <span class="va">f</span> <span class="op">=</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html" class="external-link">glm.nb</a></span><span class="op">(</span><span class="va">y</span><span class="op">~</span><span class="va">x</span>, data<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>y<span class="op">=</span><span class="va">y</span>, x<span class="op">=</span><span class="va">x</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, <span class="co"># switch to -1 here to allow covariates</span></span></span>
 <span class="r-in"><span>            error<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>coefficients<span class="op">=</span><span class="cn">NA</span>, se<span class="op">=</span><span class="cn">NA</span><span class="op">)</span> <span class="op">)</span><span class="op">)</span>  <span class="co"># getzs adds column of 1s</span></span></span>
 <span class="r-in"><span>   <span class="co">#if (inherits(f, "try-error")) return(list(coefficients=NA, se=NA))</span></span></span>
 <span class="r-in"><span>   <span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span></span></span>

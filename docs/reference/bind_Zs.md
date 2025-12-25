@@ -30,7 +30,9 @@ bind_Zs(se, colselector = function(se) 1:10)
 -   se:
 
     SummarizedExperiment assumed to have molecular phenotype data in
-    assay
+    assay. A metadata component (list element) named nonCallVars will be
+    checked and associated colData elements will be used as covariates
+    in models for effect of dosage of minor allele
 
 -   colselector:
 
