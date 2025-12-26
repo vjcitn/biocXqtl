@@ -4,14 +4,14 @@
 \alias{bind_Zs}
 \title{bind a matrix of Z statistics created with getzs to the rowRanges of a SummarizedExperiment}
 \usage{
-bind_Zs(se, colselector = function(se) 1:10)
+bind_Zs(se, colselector)
 }
 \arguments{
 \item{se}{SummarizedExperiment assumed to have molecular phenotype data in assay.  A metadata
 component (list element) named nonCallVars will be checked and associated colData elements
 will be used as covariates in models for effect of dosage of minor allele}
 
-\item{colselector}{function with argument "se" returning indices of SNP genotypes in colData(se)}
+\item{colselector}{function with argument "se" returning names of SNP genotypes in colData(se)}
 }
 \description{
 bind a matrix of Z statistics created with getzs to the rowRanges of a SummarizedExperiment
@@ -22,7 +22,7 @@ lk = geuv19[1:20,]
 mafs = maf(colData(lk)) # only snps here
 mins = apply(data.matrix(as.data.frame(colData(lk))), 2, min, na.rm=TRUE) # some -1 values
 colData(lk) = colData(lk)[,which(mafs>.25 & mins > -1)]
-lk = bind_Zs(lk)
+lk = bind_Zs(lk, colselector = function(se) grep("^snp", colnames(colData(se)))[1:10])
 head(rowRanges(lk)[,7])
 plpp2tx = as.numeric(assay(lk["ENST00000434325",]))
 hiz = colData(lk)[,"snp_19_5694231"]

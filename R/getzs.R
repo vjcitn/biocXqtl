@@ -57,24 +57,26 @@ getzs = function(molec, calls, covdf = data.frame(), statfun = function(x,y) Rcp
 
 #' bind a matrix of Z statistics created with getzs to the rowRanges of a SummarizedExperiment
 #' @import SummarizedExperiment
+#' @importFrom S4Vectors metadata
 #' @param se SummarizedExperiment assumed to have molecular phenotype data in assay.  A metadata
 #' component (list element) named nonCallVars will be checked and associated colData elements
 #' will be used as covariates in models for effect of dosage of minor allele
-#' @param colselector function with argument "se" returning indices of SNP genotypes in colData(se)
+#' @param colselector function with argument "se" returning names of SNP genotypes in colData(se)
 #' @examples
 #' data(geuv19)
 #' lk = geuv19[1:20,]
 #' mafs = maf(colData(lk)) # only snps here
 #' mins = apply(data.matrix(as.data.frame(colData(lk))), 2, min, na.rm=TRUE) # some -1 values
 #' colData(lk) = colData(lk)[,which(mafs>.25 & mins > -1)]
-#' lk = bind_Zs(lk)
+#' lk = bind_Zs(lk, colselector = function(se) grep("^snp", colnames(colData(se)))[1:10])
 #' head(rowRanges(lk)[,7])
 #' plpp2tx = as.numeric(assay(lk["ENST00000434325",]))
 #' hiz = colData(lk)[,"snp_19_5694231"]
 #' plot(plpp2tx~jitter(hiz), xlab="snp at 19:5694231", ylab="counts for a transcript of PLPP2")
 #' summary(lm(plpp2tx~hiz))
 #' @export
-bind_Zs = function(se, colselector = function(se) 1:10) {
+bind_Zs = function(se, colselector) {
+  if (missing(colselector)) stop("colselector must be specified")
   molec = as.matrix(assay(se))
   calls = data.matrix(colData(se)[, colselector(se)])
   noncallvars = metadata(se)$nonCallVars
