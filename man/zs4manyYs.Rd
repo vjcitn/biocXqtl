@@ -23,11 +23,30 @@ use procedure tailored to multiple responses for a fixed design matrix
 }
 \examples{
 data(geuv19)
-m = maf(colData(geuv19)) # only genotypes
 sds = MatrixGenerics::rowSds(assay(geuv19))
-print(quantile(m)) # note negatives!
-print(quantile(sds))
-selz = zs4manyYs(geuv19, minmaf = median(m))
+BiocParallel::register(BiocParallel::SerialParam())
+mafs = maf(colData(geuv19)) # only snps here
+mins = apply(data.matrix(as.data.frame(colData(geuv19))), 2, min, na.rm=TRUE) # some -1 values
+print(quantile(mins))
+colData(geuv19) = colData(geuv19)[,which(mafs>.25 & mins > -1)]
+selz = zs4manyYs(geuv19, minmaf = median(mafs))
 print(dim(selz))
 print(selz[1:5,1:5])
+# include adjustment for sex
+data(geuv19)
+data(geuv19_samples)
+sds = rowSds(assay(geuv19), na.rm=TRUE)
+qq = quantile(sds, .8)
+ok = which(sds > qq)
+lk = geuv19[ok,]
+mafs = maf(colData(lk)) # only snps here
+mins = apply(data.matrix(as.data.frame(colData(lk))), 2, min, na.rm=TRUE) # some -1 values
+colData(lk) = colData(lk)[,which(mafs>.25 & mins > -1)]
+namedSex = geuv19_samples$Sex
+names(namedSex) = geuv19_samples[["Sample name"]]
+snpn = colnames(colData(lk))
+lk$Sex = namedSex[colnames(lk)]
+table(lk$Sex)
+metadata(lk) = list(nonCallVars="Sex")
+run2 <- zs4manyYs(lk, seq4mol = 0.5, minmaf = .3)
 }

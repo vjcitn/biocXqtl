@@ -16,7 +16,7 @@ SummarizedExperiment
 <div class="sourceCode">
 
 ``` r
-bind_Zs(se, colselector = function(se) 1:10)
+bind_Zs(se, colselector)
 ```
 
 </div>
@@ -36,7 +36,7 @@ bind_Zs(se, colselector = function(se) 1:10)
 
 -   colselector:
 
-    function with argument "se" returning indices of SNP genotypes in
+    function with argument "se" returning names of SNP genotypes in
     colData(se)
 
 </div>
@@ -53,7 +53,7 @@ lk = geuv19[1:20,]
 mafs = maf(colData(lk)) # only snps here
 mins = apply(data.matrix(as.data.frame(colData(lk))), 2, min, na.rm=TRUE) # some -1 values
 colData(lk) = colData(lk)[,which(mafs>.25 & mins > -1)]
-lk = bind_Zs(lk)
+lk = bind_Zs(lk, colselector = function(se) grep("^snp", colnames(colData(se)))[1:10])
 head(rowRanges(lk)[,7])
 #> GRanges object with 6 ranges and 1 metadata column:
 #>                   seqnames            ranges strand | snp_19_1400679
