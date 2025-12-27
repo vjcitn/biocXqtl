@@ -11,15 +11,15 @@
 #' @note For a SNP with MAF 0, NA is returned.
 #' @return A matrix with rows corresponding to molecular phenotype features and columns corresponding to SNPs
 #' @examples
-#' data(geuv19)
-#' mol = assay(geuv19)
+#' data(geuv19xse)
+#' mol = assay(geuv19xse)
 #' sds = MatrixGenerics::rowSds(mol)
 #' mol = mol[which(sds>0), ] # drop constant features
-#' calls = data.matrix(as.data.frame(colData(geuv19)))
-#' csds = apply(calls,2,sd, na.rm=TRUE)
-#' mins = apply(calls,2,min, na.rm=TRUE)  # some snps include -1 values
-#' m = maf(calls)
-#' allz = getzs(mol[1:100,], calls[,m>.3 & csds>0 & mins > -1])
+#' callmat = data.matrix(mcols(getCalls(geuv19xse)))
+#' csds = apply(callmat,1,sd, na.rm=TRUE) # check for unvarying SNP
+#' mins = apply(callmat,1,min, na.rm=TRUE)  # some snps include -1 values
+#' m = maf(geuv19xse)
+#' allz = getzs(mol[1:100,], t(callmat[m>.3 & csds>0 & mins > -1,]))
 #' summary(as.numeric(allz))
 #' \donttest{  # 90 sec?
 #'  if (requireNamespace("MASS")) {
@@ -32,7 +32,7 @@
 #'    list(coefficients=dat[,1], se=dat[,2])
 #'  }  
 #'  # for now NA is noisily returned
-#'  allz2 = suppressWarnings(getzs(mol[1:100,], calls[,m>.3 & csds>0 & mins > -1], statfun = nbz))
+#'  allz2 = suppressWarnings(getzs(mol[1:100,], t(callmat[m>.3 & csds>0 & mins > -1,]), statfun = nbz))
 #'  # do NB results differ substantially from OLS?
 #'  plot(allz2[1,], allz[1,], xlab="NB", ylab="OLS", main=sprintf("txQTL Zs for %s", rownames(mol)[1]))
 #'  }
