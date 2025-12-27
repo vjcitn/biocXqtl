@@ -43,7 +43,8 @@ getzs = function(molec, calls, covdf = data.frame(), statfun = function(x,y) Rcp
    nmolec = nrow(molec)
    ncalls = ncol(calls)
    get1 = function(y, covdf) function(x) {
-     if (nrow(covdf)>0) x = cbind(x, data.matrix(covdf)) # genotype will always be second component of coeff
+# colData will have ncol 0 when there are no variables present
+     if (ncol(covdf)>0) x = cbind(x, data.matrix(covdf)) # genotype will always be second component of coeff
      fit = try(statfun(cbind(1,x), y), silent=TRUE) 
      if (inherits(fit, "try-error")) return(NA) 
      if (any(is.na(fit$coefficients))) return(NA)
@@ -61,27 +62,26 @@ getzs = function(molec, calls, covdf = data.frame(), statfun = function(x,y) Rcp
 #' @param se SummarizedExperiment assumed to have molecular phenotype data in assay.  A metadata
 #' component (list element) named nonCallVars will be checked and associated colData elements
 #' will be used as covariates in models for effect of dosage of minor allele
-#' @param colselector function with argument "se" returning names of SNP genotypes in colData(se)
+#' @note All variables in colData(se) will be used as covariates in association tests.  Use
+#' `colData(se) <- NULL` to eliminate covariate adjustment.
 #' @examples
-#' data(geuv19)
-#' lk = geuv19[1:20,]
-#' mafs = maf(colData(lk)) # only snps here
-#' mins = apply(data.matrix(as.data.frame(colData(lk))), 2, min, na.rm=TRUE) # some -1 values
-#' colData(lk) = colData(lk)[,which(mafs>.25 & mins > -1)]
-#' lk = bind_Zs(lk, colselector = function(se) grep("^snp", colnames(colData(se)))[1:10])
+#' data(geuv19xse)
+#' lk = geuv19xse[1:20,]
+#' mafs = maf(lk) # only snps here
+#' mins = apply(data.matrix(mcols(getCalls(lk))), 1, min, na.rm=TRUE) # some -1 values
+#' #filterCalls = function(xse, keep) { slot(xse, "calls") = slot(xse, "calls")[keep,]; xse }
+#' lk = filterCalls(lk, which(mafs>.25 & mins > -1))
+#' lk = bind_Zs(lk)
 #' head(rowRanges(lk)[,7])
 #' plpp2tx = as.numeric(assay(lk["ENST00000434325",]))
-#' hiz = colData(lk)[,"snp_19_5694231"]
+#' hiz = as.numeric(data.matrix(mcols(getCalls(lk))["snp_19_5694231",]))
 #' plot(plpp2tx~jitter(hiz), xlab="snp at 19:5694231", ylab="counts for a transcript of PLPP2")
 #' summary(lm(plpp2tx~hiz))
 #' @export
-bind_Zs = function(se, colselector) {
-  if (missing(colselector)) stop("colselector must be specified")
+bind_Zs = function(se) {
   molec = as.matrix(assay(se))
-  calls = data.matrix(colData(se)[, colselector(se)])
-  noncallvars = metadata(se)$nonCallVars
-  covdf = data.frame()
-  if (length(noncallvars)>0) covdf = as.data.frame(colData(se)[,noncallvars])
+  calls = t(data.matrix(mcols(getCalls(se))))
+  covdf = as.data.frame(colData(se))  # has zero columns unless a covariate is present and will be used
   stats = getzs(molec, calls, covdf)
   stopifnot(all(rownames(stats) == rownames(se)))
   mcols(rowRanges(se)) = cbind(mcols(rowRanges(se)), stats)

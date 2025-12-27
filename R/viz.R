@@ -23,16 +23,22 @@
 #' @export
 viz_stats = function(se, jitter_fac=500, ptcolor="blue", midchop=2,
    xlabel="SNP addr", ylabel="xQTL association Z") {
+  md = metadata(se)
+  stopifnot("snpaddrs" %in% names(md))
+  uchr = unique(md$snpchrs)
+  if (length(uchr)>1) message("snpchrs metadata indicate more than one chromosome, SNPs from different chrs may be superimposed")
   feat <- name <- value <- NULL
   tt = rowData(se)
   sn = colnames(tt)[-c(1:6)]
-  addr = as.numeric(sapply(strsplit(sn, "_"), "[", 3))
+  addr = md$snpaddrs
   sndf = as.data.frame(tt[,-c(1:6)])
   nc = ncol(sndf)
   sndf$feat = rownames(sndf)
   pp = pivot_longer(sndf, cols=1:nc)
+  longaddr = rep(addr, nc)
+  pp$addr = longaddr
   pp = pp[abs(pp$value)>midchop,]
-  pp$addr = as.numeric(sapply(strsplit(pp$name, "_"), "[", 3))
+  #pp$addr = as.numeric(sapply(strsplit(pp$name, "_"), "[", 3))
   pl <- ggplot(pp, aes(x=jitter(addr,jitter_fac), y=value, 
        text=sprintf("%s<br>%s",feat, name))) + geom_point(colour=ptcolor) +
      xlab(xlabel) + ylab(ylabel)

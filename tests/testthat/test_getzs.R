@@ -5,10 +5,10 @@ kn = structure(c(0.469670093243737, -0.302763172921657, 0.107161454143419,
 
 
 test_that("getzs works", {
-   if (!exists("geuv19")) data(geuv19)
-   mol = assay(geuv19)
-   calls = data.matrix(as.data.frame(colData(geuv19)))
-   m = maf(calls)
+   if (!exists("geuv19xse")) data(geuv19xse)
+   mol = assay(geuv19xse)
+   calls = t(data.matrix(mcols(getCalls(geuv19xse))))
+   m = maf(geuv19xse)
    tt = getzs(mol[300:301,], calls[,m>.3])
    expect_true(all.equal(tt[1:2,1:2], kn))
 })

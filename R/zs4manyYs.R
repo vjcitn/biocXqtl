@@ -50,11 +50,12 @@ zs4manyYs = function (se, seq4mol = 0.5, minmaf = 0.3, BPPARAM=BiocParallel::bpp
     calls = data.matrix(as.data.frame(colData(se)[,snpn]))
     colnames(calls) = colnames(colData(se)[,snpn]) #names get munged otherwise
     m = maf(calls)
+    if (any(m > 0.5)) message("some variants have MAF > 0.5, omitting")
     mins = apply(calls,2,min,na.rm=TRUE)  
     maxs = apply(calls,2,max,na.rm=TRUE)  
     if (any(mins < 0)) message("negative minor allele count found")
-    if (any(maxs > 2)) message("minor allele count >2 found")
-    okc = which(m > minmaf & mins >=0)
+    if (any(maxs > 2)) message("minor allele count(s) > 2 found, omitting")
+    okc = which(m > minmaf & mins >=0 & m <= .5)
     calls = calls[, okc]
     Y = t(as.matrix(assay(se)))
     test_bld = function(cmat) function(x) {

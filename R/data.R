@@ -14,3 +14,15 @@
 #' @usage data(geuv19_samples)
 #' @format data.frame
 "geuv19_samples"
+
+#' a RangedSummarizedExperiment with data from GeuvadisTranscriptExpr, in XqtlExperiment format
+#' @docType data
+#' @usage data(geuv19xse)
+#' @format RangedSummarizedExperiment
+#' @note Minor allele counts are in calls slot.  Some entries are -1.  This
+#' is not explained in GeuvadisTranscriptExpr.
+#' @examples
+#' data(geuv19xse)
+#' rowRanges(geuv19xse[1:3,])
+"geuv19xse"
+

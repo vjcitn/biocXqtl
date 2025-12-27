@@ -1,5 +1,7 @@
 
-#' extend SummarizedExperiment to include genotype calls in a GRanges
+#' extend RangedSummarizedExperiment to include genotype calls in a GRanges
+#' @note We use RangedSummarizedExperiment to ensure we can identify genomic
+#' distance between molecular features and variants
 #' @examples
 #' data(mageSE_19)
 #' vp = system.file("vcf", "chr19_50k.vcf.gz", package="biocXqtl")
@@ -8,7 +10,7 @@
 #' mp = mp[, colnames(mageSE_19)]
 #' new("XqtlExperiment", mageSE_19, calls=mp)
 #' @export
-setClass("XqtlExperiment", contains="SummarizedExperiment",
+setClass("XqtlExperiment", contains="RangedSummarizedExperiment",
   slots=c("calls"="GRanges"))
 
 #' present concise view of XqtlExperiment
@@ -17,6 +19,7 @@ setClass("XqtlExperiment", contains="SummarizedExperiment",
 setMethod("show", "XqtlExperiment", function(object) {
  callNextMethod()
  cat(sprintf("  %d genotype calls present.\n", length(slot(object, "calls"))))
+ cat(sprintf("  use getCalls() to see them with addresses.\n"))
 })
 
 #' XqtlExperiment constructor
@@ -49,3 +52,9 @@ getCalls = function(xse) slot(xse, "calls")
 #' compute putative minor allele frequency for XqtlExperiment
 #' @export
 maf = function(xse) apply(mcols(getCalls(xse)),1, function(x) sum(x)/(2*length(x)))
+
+#' filter the call component of an XqtlExperiment
+#' @param xse XqtlExperiment instance
+#' @param keep vector of indices or logical selections
+#' @export
+filterCalls = function(xse, keep) { slot(xse, "calls") = slot(xse, "calls")[keep,]; xse }

@@ -1,20 +1,15 @@
 # build RSE with nonCallVars in metadata
-   if (!exists("geuv19")) data(geuv19)
+   if (!exists("geuv19xse")) data(geuv19xse)
    data(geuv19_samples)
    namedSex = geuv19_samples$Sex
    names(namedSex) = geuv19_samples[["Sample name"]]
-   geuv19$Sex = namedSex[colnames(geuv19)]
-   table(geuv19$Sex)
-   metadata(geuv19) = list(nonCallVars="Sex")
+   geuv19xse$Sex = namedSex[colnames(geuv19xse)]
+   table(geuv19xse$Sex)
 # process the metadata to develop calls and mol
-   cd = colData(geuv19)
-   kp = setdiff(colnames(cd), metadata(geuv19)$nonCallVars)
-   calls = cd[,kp]
-   m = maf(calls)
-   calls = calls[,which(m>.3)]
-   covar = as.data.frame(cd[,metadata(geuv19)$nonCallVars])
-   names(covar) = metadata(geuv19)$nonCallVars
-   mol = assay(geuv19)
+   m = maf(geuv19xse)
+   calls = t(data.matrix(mcols(getCalls(geuv19xse)[which(m>.3),])))
+   covar = as.data.frame(geuv19xse$Sex)
+   mol = assay(geuv19xse)
    litdf = data.frame(y=as.numeric(mol[1,]), snp=calls[,1], Sex=covar[,1])
 
 test_that("getzs with one covariate works", {
@@ -28,7 +23,7 @@ test_that("getzs with one covariate works", {
 })
 
 
-# note that the GeuvadisTranscriptExpr/geuv19 "counts" are expected counts from FluxCapacitor...
+# note that the GeuvadisTranscriptExpr/geuv19xse "counts" are expected counts from FluxCapacitor...
 # thus rounding is used below
 test_that("negative binomial fits work with covariate", { 
   nbz = function(x,y) {
