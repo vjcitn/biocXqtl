@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">biocXqtl</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,27 @@
 
       <dl><dt>
 
+          <code><a href="XqtlExperiment-class.html">XqtlExperiment-class</a></code>
+
+        </dt>
+        <dd>extend RangedSummarizedExperiment to include genotype calls in a GRanges</dd>
+
+        <dt>
+
+          <code><a href="XqtlExperiment.html">XqtlExperiment()</a></code>
+
+        </dt>
+        <dd>XqtlExperiment constructor</dd>
+
+        <dt>
+
+          <code><a href="add_calls_from_vcf.html">add_calls_from_vcf()</a></code>
+
+        </dt>
+        <dd>add minor allele counts from a VCF to SummarizedExperiment with common samples</dd>
+
+        <dt>
+
           <code><a href="bind_Zs.html">bind_Zs()</a></code>
 
         </dt>
@@ -50,10 +71,66 @@
 
         <dt>
 
+          <code><a href="countGenotypes.html">countGenotypes()</a></code>
+
+        </dt>
+        <dd>Count genotypes across samples for each variant</dd>
+
+        <dt>
+
+          <code><a href="countGenotypesVectorized.html">countGenotypesVectorized()</a></code>
+
+        </dt>
+        <dd>More efficient vectorized version for large datasets</dd>
+
+        <dt>
+
+          <code><a href="demo_vcf.html">demo_vcf()</a></code>
+
+        </dt>
+        <dd>provide path to a demonstration VCF file</dd>
+
+        <dt>
+
           <code><a href="fastLmMany_R.html">fastLmMany_R()</a></code>
 
         </dt>
         <dd>Fit multiple linear models with common design matrix</dd>
+
+        <dt>
+
+          <code><a href="filterCalls.html">filterCalls()</a></code>
+
+        </dt>
+        <dd>filter the call component of an XqtlExperiment</dd>
+
+        <dt>
+
+          <code><a href="filterVcfByGenotypeCounts.html">filterVcfByGenotypeCounts()</a></code>
+
+        </dt>
+        <dd>Filter VCF to variants with minimum counts in each genotype group</dd>
+
+        <dt>
+
+          <code><a href="filterVcfMultipleCriteria.html">filterVcfMultipleCriteria()</a></code>
+
+        </dt>
+        <dd>Filter VCF with multiple criteria</dd>
+
+        <dt>
+
+          <code><a href="getCalls.html">getCalls()</a></code>
+
+        </dt>
+        <dd>getter for genotype calls</dd>
+
+        <dt>
+
+          <code><a href="getGenotypeSummary.html">getGenotypeSummary()</a></code>
+
+        </dt>
+        <dd>Get genotype summary statistics</dd>
 
         <dt>
 
@@ -78,10 +155,38 @@
 
         <dt>
 
+          <code><a href="geuv19xse.html">geuv19xse</a></code>
+
+        </dt>
+        <dd>a RangedSummarizedExperiment with data from GeuvadisTranscriptExpr, in XqtlExperiment format</dd>
+
+        <dt>
+
           <code><a href="maf.html">maf()</a></code>
 
         </dt>
-        <dd>simple function for MAF calculation</dd>
+        <dd>compute putative minor allele frequency for XqtlExperiment</dd>
+
+        <dt>
+
+          <code><a href="mageSE_19.html">mageSE_19</a></code>
+
+        </dt>
+        <dd>SummarizedExperiment from MAGE</dd>
+
+        <dt>
+
+          <code><a href="minorAlleleCounts.html">minorAlleleCounts()</a></code>
+
+        </dt>
+        <dd>produce data.frame with minor allele counts in a region, from VCF</dd>
+
+        <dt>
+
+          <code><a href="show-XqtlExperiment-method.html">show(<i>&lt;XqtlExperiment&gt;</i>)</a></code>
+
+        </dt>
+        <dd>present concise view of XqtlExperiment</dd>
 
         <dt>
 

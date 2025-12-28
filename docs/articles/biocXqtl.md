@@ -26,10 +26,10 @@ structuring the inputs to association test procedures.
 
 ### Basic data
 
-`geuv19` is a RangedSummarizedExperiment derived from the
+`geuv19xse` is an extended RangedSummarizedExperiment derived from the
 [GeuvadisTranscriptExpr](https://bioconductor.org/package/GeuvadisTranscriptExpr)
 package. The assay component provides transcript level counts. Genotypes
-are available in the colData.
+are available through the getCalls method.
 
 <div id="cb1" class="sourceCode">
 
@@ -44,27 +44,28 @@ library(biocXqtl)
 <div id="cb3" class="sourceCode">
 
 ``` r
-data(geuv19)
-geuv19
+data(geuv19xse)
+geuv19xse
 ```
 
 </div>
 
-    ## class: RangedSummarizedExperiment 
+    ## class: XqtlExperiment 
     ## dim: 4278 91 
-    ## metadata(1): snplocs
+    ## metadata(3): snplocs snpaddrs snpchrs
     ## assays(1): counts
     ## rownames(4278): ENST00000545779 ENST00000408051 ... ENST00000313038
     ##   ENST00000401283
     ## rowData names(6): tx_id tx_biotype ... gene_id tx_name
     ## colnames(91): NA06984 NA06985 ... NA12889 NA12890
-    ## colData names(1330): snp_19_1392636 snp_19_1393723 ... snp_19_58273441
-    ##   snp_19_58274425
+    ## colData names(0):
+    ##   1330 genotype calls present.
+    ##   use getCalls() to see them with addresses.
 
 <div id="cb5" class="sourceCode">
 
 ``` r
-assay(geuv19[1:3,1:4])
+assay(geuv19xse[1:3,1:4])
 ```
 
 </div>
@@ -77,7 +78,7 @@ assay(geuv19[1:3,1:4])
 <div id="cb7" class="sourceCode">
 
 ``` r
-rowRanges(geuv19[1:3,])
+rowRanges(geuv19xse[1:3,])
 ```
 
 </div>
@@ -104,17 +105,24 @@ rowRanges(geuv19[1:3,])
 <div id="cb9" class="sourceCode">
 
 ``` r
-colData(geuv19)[1:3,1:4]
+getCalls(geuv19xse)[1:3,1:4]
 ```
 
 </div>
 
-    ## DataFrame with 3 rows and 4 columns
-    ##         snp_19_1392636 snp_19_1393723 snp_19_1394530 snp_19_1396952
-    ##              <integer>      <integer>      <integer>      <integer>
-    ## NA06984              1              0              0              0
-    ## NA06985              0              0              0              0
-    ## NA06986              0              0              0              0
+    ## GRanges object with 3 ranges and 4 metadata columns:
+    ##                  seqnames    ranges strand |   NA06984   NA06985   NA06986
+    ##                     <Rle> <IRanges>  <Rle> | <integer> <integer> <integer>
+    ##   snp_19_1392636       19   1392636      * |         1         0         0
+    ##   snp_19_1393723       19   1393723      * |         0         0         0
+    ##   snp_19_1394530       19   1394530      * |         0         0         0
+    ##                    NA06989
+    ##                  <integer>
+    ##   snp_19_1392636         0
+    ##   snp_19_1393723         0
+    ##   snp_19_1394530         0
+    ##   -------
+    ##   seqinfo: 1 sequence from an unspecified genome; no seqlengths
 
 </div>
 
@@ -125,37 +133,36 @@ colData(geuv19)[1:3,1:4]
 From a computational viewpoint, the simplest assessment of molecular
 QTLs involves fitting a linear model to assess additive association of
 minor allele dose with the molecular response. From an organizational
-viewpoint, a simple approach is to start and end with a
-RangedSummarizedExperiment instance. `bind_Zs` carries this out for the
-situation in which genotype calls are managed in a natural way in
-colData.
+viewpoint, a simple approach is to start and end with an XqtlExperiment.
+rowRanges will be updated to include Z-scores for tests of association
+of each variant with each molecular feature.
 
 <div id="cb11" class="sourceCode">
 
 ``` r
-m = maf(colData(geuv19))
-mins = apply(data.matrix(as.data.frame(colData(geuv19))), 2, min, na.rm=TRUE)
+m = maf(geuv19xse)
+mins = apply(data.matrix(mcols(getCalls(geuv19xse))), 1, min, na.rm=TRUE)
 ok = which(m > .3 & mins > -1)   # very small sample size
-limg = geuv19[1:100,]
-colData(limg) = colData(limg)[,ok]
-limg = bind_Zs(limg, 
-   colselector=function(se) colnames(colData(se)))
-limg
+limg = filterCalls(geuv19xse[1:100,], ok)
+limg = bind_Zs(limg)
+rowRanges(limg)[1:3,7:10]
 ```
 
 </div>
 
-    ## class: RangedSummarizedExperiment 
-    ## dim: 100 91 
-    ## metadata(1): snplocs
-    ## assays(1): counts
-    ## rownames(100): ENST00000545779 ENST00000408051 ... ENST00000313093
-    ##   ENST00000543365
-    ## rowData names(241): tx_id tx_biotype ... snp_19_58269173
-    ##   snp_19_58274425
-    ## colnames(91): NA06984 NA06985 ... NA12889 NA12890
-    ## colData names(235): snp_19_1400679 snp_19_1400766 ... snp_19_58269173
-    ##   snp_19_58274425
+    ## GRanges object with 3 ranges and 4 metadata columns:
+    ##                   seqnames            ranges strand | snp_19_1400679
+    ##                      <Rle>         <IRanges>  <Rle> |      <numeric>
+    ##   ENST00000545779       18 15254418-15271744      + |      0.0361026
+    ##   ENST00000408051       19       71973-72110      + |            NaN
+    ##   ENST00000318050       19     110643-111696      + |      1.1910512
+    ##                   snp_19_1400766 snp_19_5694630 snp_19_5696245
+    ##                        <numeric>      <numeric>      <numeric>
+    ##   ENST00000545779       0.664277     -0.9581762      -1.531837
+    ##   ENST00000408051            NaN            NaN            NaN
+    ##   ENST00000318050       0.752205     -0.0378885       0.153209
+    ##   -------
+    ##   seqinfo: 319 sequences (1 circular) from GRCh38 genome
 
 All the Z-scores for tests of association are in the rowRanges of
 `limg`. The first 6 elements of the mcols of the rowRanges are related
@@ -166,7 +173,7 @@ dark tiles to positive.
 <div id="cb13" class="sourceCode">
 
 ``` r
-zs = data.matrix(as.data.frame(mcols(rowRanges(limg))[,-c(1:6)]))
+zs = data.matrix(mcols(rowRanges(limg))[,-c(1:6)])
 zs[is.na(zs)] = 0
 heatmap(zs, Colv=NA, scale="none")
 ```
@@ -189,7 +196,7 @@ underlying interpretation of the Z-score.
 
 ``` r
 mo = function(x) as.numeric(assay(limg[x,]))
-sn = function(x) as.numeric(colData(limg)[,x])
+sn = function(x) as.numeric(data.matrix(mcols(getCalls(limg)[x,])))
 beeswarm::beeswarm(jitter(mo("ENST00000529442"))~sn("snp_19_19631444"))
 ```
 
@@ -209,15 +216,15 @@ made. For this illustration we start from scratch.
 <div id="cb15" class="sourceCode">
 
 ``` r
-data(geuv19)
-sds = rowSds(assay(geuv19), na.rm=TRUE)
+data(geuv19xse)
+sds = rowSds(assay(geuv19xse), na.rm=TRUE)
 qq = quantile(sds, .8)
 ok = which(sds > qq)
-lk = geuv19[ok,]
-mafs = maf(colData(lk)) # only snps here
-mins = apply(data.matrix(as.data.frame(colData(lk))), 2, min, na.rm=TRUE) # some -1 values
-colData(lk) = colData(lk)[,which(mafs>.25 & mins > -1)]
-run1 <- bind_Zs(lk, colselector = function(se) colnames(colData(se)))
+lk = geuv19xse[ok,]
+mafs = maf(lk) # only snps here
+mins = apply(data.matrix(mcols(getCalls(lk))), 1, min, na.rm=TRUE) # some -1 values
+lk = filterCalls(lk, which(mafs>.25 & mins > -1))
+run1 <- bind_Zs(lk)
 viz_stats(run1)
 ```
 
@@ -237,10 +244,7 @@ Zoom and axis restoration are available with standard plotly controls.
 
 ### Adding a covariatae
 
-`bind_Zs` will use the covariate information when a metadata component
-`nonCallVars` is present and coincides with a set of colData variables.
-All colData variables not listed in `nonCallVars` in metadata will be
-regarded as genotype calls.
+`bind_Zs` will use the covariate information present in colData().
 
 For GEUVADIS data in GeuvadisTranscriptExpr, we have collected
 sample-level information on sex. Again we start from scratch, filter,
@@ -249,18 +253,17 @@ add the covariate information, and compute tests.
 <div id="cb16" class="sourceCode">
 
 ``` r
-data(geuv19)
+data(geuv19xse)
 data(geuv19_samples)
-sds = rowSds(assay(geuv19), na.rm=TRUE)
+sds = rowSds(assay(geuv19xse), na.rm=TRUE)
 qq = quantile(sds, .8)
 ok = which(sds > qq)
-lk = geuv19[ok,]
-mafs = maf(colData(lk)) # only snps here
-mins = apply(data.matrix(as.data.frame(colData(lk))), 2, min, na.rm=TRUE) # some -1 values
-colData(lk) = colData(lk)[,which(mafs>.25 & mins > -1)]
+lk = geuv19xse[ok,]
+mafs = maf(lk)
+mins = apply(data.matrix(mcols(getCalls(lk))), 1, min, na.rm=TRUE) # some -1 values
+lk = filterCalls(lk,which(mafs>.25 & mins > -1))
 namedSex = geuv19_samples$Sex
 names(namedSex) = geuv19_samples[["Sample name"]]
-snpn = colnames(colData(lk))
 lk$Sex = namedSex[colnames(lk)]
 table(lk$Sex)
 ```
@@ -274,8 +277,7 @@ table(lk$Sex)
 <div id="cb18" class="sourceCode">
 
 ``` r
-metadata(lk) = list(nonCallVars="Sex")
-run2 <- bind_Zs(lk, colselector = function(se) snpn)  # filtered snp names
+run2 <- bind_Zs(lk)
 ```
 
 </div>
@@ -297,6 +299,110 @@ plot(as.numeric(m1) - as.numeric(m2)~as.numeric(m1), pch=".")
 ![](biocXqtl_files/figure-html/lkests-1.png)
 
 </div>
+
+</div>
+
+<div class="section level2">
+
+## Working with variants from VCF
+
+Thanks to the AWS Open Data project, tabix-indexed VCFs for genotyped
+lymphoblastoid cell lines from the 1000 genomes project are
+[available](https://registry.opendata.aws/1000-genomes/). Data from the
+Multi-Ancestry analysis of Gene Expression are
+[available](https://github.com/mccoy-lab/MAGE) via Zenodo or Dropbox. In
+our experience the Dropbox link is more performant.
+
+We have acquired the “DESeq2” gene quantifications from the MAGE
+archive, and a selection of `release` genotypes from the associated cell
+lines.
+
+The expression data:
+
+<div id="cb20" class="sourceCode">
+
+``` r
+data(mageSE_19)
+```
+
+</div>
+
+Genotype data:
+
+<div id="cb21" class="sourceCode">
+
+``` r
+dv = demo_vcf()
+h = VariantAnnotation::scanVcfHeader(dv)
+head(samples(h))
+```
+
+</div>
+
+    ## [1] "HG00096" "HG00100" "HG00105" "HG00108" "HG00110" "HG00113"
+
+<div id="cb23" class="sourceCode">
+
+``` r
+length(intersect(samples(h), colnames(mageSE_19)))
+```
+
+</div>
+
+    ## [1] 731
+
+We will focus on SNVs but the genotype information has other types of
+variants.
+
+Bind the minor allele counts to the expression data:
+
+<div id="cb25" class="sourceCode">
+
+``` r
+mins  = minorAlleleCounts(demo_vcf(), GRanges("19:1-50000000"))
+mxx = XqtlExperiment(mageSE_19, mins)
+colData(mxx) = NULL
+```
+
+</div>
+
+The last command there allows us to compute crude measures of
+association. If we populate colData with covariate information, test
+procedures in the package will incorporate it.
+
+The following step uses C++ modules to compute association tests for all
+genotypes and all gene expression measures in mageSE\_19.
+
+<div id="cb26" class="sourceCode">
+
+``` r
+system.time(zzz <- zs4manyYs(mxx))
+```
+
+</div>
+
+    ## some variants have MAF > 0.5, omitting
+
+    ##    user  system elapsed 
+    ## 993.316   3.391 252.007
+
+Here’s a helper function to visualize one association.
+
+<div id="cb29" class="sourceCode">
+
+``` r
+onebox = function(xse, mfeat="ENSG00000172270", vnt="rs151237303", title) {
+if (missing(title)) title=""
+boxplot(split(as.numeric(assay(xse[mfeat,])),
+   as.numeric(data.matrix(mcols(getCalls(xse)[vnt,])))),
+   ylab=mfeat, xlab=vnt, main=title)
+}
+onebox(mxx, title="MAGE eQTL")
+```
+
+</div>
+
+![](biocXqtl_files/figure-html/helper-1.png)
 
 </div>
 

@@ -16,7 +16,7 @@ SummarizedExperiment
 <div class="sourceCode">
 
 ``` r
-bind_Zs(se, colselector)
+bind_Zs(se)
 ```
 
 </div>
@@ -34,10 +34,14 @@ bind_Zs(se, colselector)
     checked and associated colData elements will be used as covariates
     in models for effect of dosage of minor allele
 
--   colselector:
+</div>
 
-    function with argument "se" returning names of SNP genotypes in
-    colData(se)
+<div class="section level2">
+
+## Note
+
+All variables in colData(se) will be used as covariates in association
+tests. Use \`colData(se) &lt;- NULL\` to eliminate covariate adjustment.
 
 </div>
 
@@ -48,12 +52,13 @@ bind_Zs(se, colselector)
 <div class="sourceCode">
 
 ``` r
-data(geuv19)
-lk = geuv19[1:20,]
-mafs = maf(colData(lk)) # only snps here
-mins = apply(data.matrix(as.data.frame(colData(lk))), 2, min, na.rm=TRUE) # some -1 values
-colData(lk) = colData(lk)[,which(mafs>.25 & mins > -1)]
-lk = bind_Zs(lk, colselector = function(se) grep("^snp", colnames(colData(se)))[1:10])
+data(geuv19xse)
+lk = geuv19xse[1:20,]
+mafs = maf(lk) # only snps here
+mins = apply(data.matrix(mcols(getCalls(lk))), 1, min, na.rm=TRUE) # some -1 values
+#filterCalls = function(xse, keep) { slot(xse, "calls") = slot(xse, "calls")[keep,]; xse }
+lk = filterCalls(lk, which(mafs>.25 & mins > -1))
+lk = bind_Zs(lk)
 head(rowRanges(lk)[,7])
 #> GRanges object with 6 ranges and 1 metadata column:
 #>                   seqnames            ranges strand | snp_19_1400679
@@ -67,7 +72,7 @@ head(rowRanges(lk)[,7])
 #>   -------
 #>   seqinfo: 319 sequences (1 circular) from GRCh38 genome
 plpp2tx = as.numeric(assay(lk["ENST00000434325",]))
-hiz = colData(lk)[,"snp_19_5694231"]
+hiz = as.numeric(data.matrix(mcols(getCalls(lk))["snp_19_5694231",]))
 plot(plpp2tx~jitter(hiz), xlab="snp at 19:5694231", ylab="counts for a transcript of PLPP2")
 
 summary(lm(plpp2tx~hiz))

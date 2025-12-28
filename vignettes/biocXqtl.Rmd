@@ -148,3 +148,60 @@ m2 = data.matrix(as.data.frame(mcols(run2)[,-c(1:6)]))
 m1 = data.matrix(as.data.frame(mcols(run1)[,-c(1:6)]))
 plot(as.numeric(m1) - as.numeric(m2)~as.numeric(m1), pch=".")
 ```
+
+# Working with variants from VCF
+
+Thanks to the AWS Open Data project, tabix-indexed VCFs for genotyped
+lymphoblastoid cell lines from the 1000 genomes project
+are [available](https://registry.opendata.aws/1000-genomes/).
+Data from the Multi-Ancestry analysis of Gene Expression
+are [available](https://github.com/mccoy-lab/MAGE)
+via Zenodo or
+Dropbox.  In our experience the Dropbox link is more performant.
+
+We have acquired the "DESeq2" gene quantifications from
+the MAGE archive, and a selection of `release` genotypes
+from the associated cell lines.
+
+The expression data:
+```{r theex}
+data(mageSE_19)
+```
+
+Genotype data:
+```{r lkgt}
+dv = demo_vcf()
+h = VariantAnnotation::scanVcfHeader(dv)
+head(samples(h))
+length(intersect(samples(h), colnames(mageSE_19)))
+```
+
+We will focus on SNVs but the genotype information
+has other types of variants.
+
+Bind the minor allele counts to the expression data:
+```{r dobind}
+mins  = minorAlleleCounts(demo_vcf(), GRanges("19:1-50000000"))
+mxx = XqtlExperiment(mageSE_19, mins)
+colData(mxx) = NULL
+```
+The last command there allows us to compute crude measures of association.
+If we populate colData with covariate information, test procedures
+in the package will incorporate it.
+
+The following step uses C++ modules to compute association tests for
+all genotypes and all gene expression measures in mageSE_19.
+```{r dotests}
+system.time(zzz <- zs4manyYs(mxx))
+```
+
+Here's a helper function to visualize one association.
+```{r helper}
+onebox = function(xse, mfeat="ENSG00000172270", vnt="rs151237303", title) {
+if (missing(title)) title=""
+boxplot(split(as.numeric(assay(xse[mfeat,])),
+   as.numeric(data.matrix(mcols(getCalls(xse)[vnt,])))),
+   ylab=mfeat, xlab=vnt, main=title)
+}
+onebox(mxx, title="MAGE eQTL")
+```

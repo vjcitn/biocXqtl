@@ -1,10 +1,10 @@
 <div id="main" class="col-md-9" role="main">
 
-# compute putative minor allele frequency for XqtlExperiment
+# SummarizedExperiment from MAGE
 
 <div class="ref-description section level2">
 
-compute putative minor allele frequency for XqtlExperiment
+SummarizedExperiment from MAGE
 
 </div>
 
@@ -15,10 +15,18 @@ compute putative minor allele frequency for XqtlExperiment
 <div class="sourceCode">
 
 ``` r
-maf(xse)
+data(mageSE_19)
 ```
 
 </div>
+
+</div>
+
+<div class="section level2">
+
+## Format
+
+SummarizedExperiment
 
 </div>
 

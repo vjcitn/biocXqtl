@@ -10,16 +10,37 @@
 
 <div class="section level2">
 
+-   `XqtlExperiment-class` : extend RangedSummarizedExperiment to
+    include genotype calls in a GRanges
+-   `XqtlExperiment()` : XqtlExperiment constructor
+-   `add_calls_from_vcf()` : add minor allele counts from a VCF to
+    SummarizedExperiment with common samples
 -   `bind_Zs()` : bind a matrix of Z statistics created with getzs to
     the rowRanges of a SummarizedExperiment
+-   `countGenotypes()` : Count genotypes across samples for each variant
+-   `countGenotypesVectorized()` : More efficient vectorized version for
+    large datasets
+-   `demo_vcf()` : provide path to a demonstration VCF file
 -   `fastLmMany_R()` : Fit multiple linear models with common design
     matrix
+-   `filterCalls()` : filter the call component of an XqtlExperiment
+-   `filterVcfByGenotypeCounts()` : Filter VCF to variants with minimum
+    counts in each genotype group
+-   `filterVcfMultipleCriteria()` : Filter VCF with multiple criteria
+-   `getCalls()` : getter for genotype calls
+-   `getGenotypeSummary()` : Get genotype summary statistics
 -   `getzs()` : create a matrix of Z statistics for an additive effect
     of rare allele count in calls on molecular phenotype in molec
 -   `geuv19` : a RangedSummarizedExperiment with data from
     GeuvadisTranscriptExpr
 -   `geuv19_samples` : data frame with sample information for geuv19
--   `maf()` : simple function for MAF calculation
+-   `geuv19xse` : a RangedSummarizedExperiment with data from
+    GeuvadisTranscriptExpr, in XqtlExperiment format
+-   `maf()` : compute putative minor allele frequency for XqtlExperiment
+-   `mageSE_19` : SummarizedExperiment from MAGE
+-   `minorAlleleCounts()` : produce data.frame with minor allele counts
+    in a region, from VCF
+-   `show(<XqtlExperiment>)` : present concise view of XqtlExperiment
 -   `viz_stats()` : produce a plotly display of statistics of xQTL
     association
 -   `zs4manyYs()` : use procedure tailored to multiple responses for a
