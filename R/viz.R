@@ -31,12 +31,14 @@ viz_stats = function(se, jitter_fac=500, ptcolor="blue", midchop=2,
 #  tt = rowData(se)
 #  sn = colnames(tt)[-c(1:6)]
 #  addr = md$snpaddrs
-  addr = start(getCalls(se))
   sndf = as.data.frame(mcols(rowRanges(se)[,-c(1:6)]))
-  nc = ncol(sndf)
-  sndf$feat = rownames(sndf)
-  pp = pivot_longer(sndf, cols=1:nc)
-  longaddr = rep(addr, nrow(sndf))
+  ii = intersect(colnames(sndf), names(getCalls(se)))  # not all calls are tested
+  addr = start(getCalls(se)[ii,]) # get starts for those tested
+  sndf = sndf[,ii] # make compatible
+#  sndf$feat = rownames(sndf)  # adds column
+  pp = pivot_longer(sndf, cols=1:ncol(sndf))
+  pp$feat = rep(rownames(sndf), ncol(sndf))
+  longaddr = rep(addr, nrow(sndf)) # for feat also
   pp$addr = longaddr
   pp = pp[abs(pp$value)>midchop,]
   #pp$addr = as.numeric(sapply(strsplit(pp$name, "_"), "[", 3))

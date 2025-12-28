@@ -205,3 +205,10 @@ boxplot(split(as.numeric(assay(xse[mfeat,])),
 }
 onebox(mxx, title="MAGE eQTL")
 ```
+
+We can also visualize interactively:
+```{r doviz2}
+mcols(rowRanges(mxx)) = cbind(mcols(rowRanges(mxx)), zzz)
+viz_stats(mxx, midchop=7)
+```
+
