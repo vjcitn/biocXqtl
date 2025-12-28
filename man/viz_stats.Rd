@@ -30,14 +30,14 @@ viz_stats(
 produce a plotly display of statistics of xQTL association
 }
 \examples{
-data(geuv19)
-sds = MatrixGenerics::rowSds(assay(geuv19), na.rm=TRUE)
+data(geuv19xse)
+sds = MatrixGenerics::rowSds(assay(geuv19xse), na.rm=TRUE)
 qq = quantile(sds, .8)
 ok = which(sds > qq)
-lk = geuv19[ok,]
-mafs = maf(colData(lk)) # only snps here
-mins = apply(data.matrix(as.data.frame(colData(lk))), 2, min, na.rm=TRUE) # some -1 values
-colData(lk) = colData(lk)[,which(mafs>.25 & mins > -1)]
-lk <- bind_Zs(lk, colselector = function(se) colnames(colData(se)))
+lk = geuv19xse[ok,]
+mafs = maf(lk) 
+mins = apply(data.matrix(mcols(getCalls(lk))), 1, min, na.rm=TRUE)
+lk = filterCalls(lk, which(mafs>.25 & mins > -1))
+lk <- bind_Zs(lk)
 viz_stats(lk)
 }

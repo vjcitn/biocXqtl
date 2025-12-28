@@ -4,14 +4,10 @@
 \alias{zs4manyYs}
 \title{use procedure tailored to multiple responses for a fixed design matrix}
 \usage{
-zs4manyYs(se, seq4mol = 0.5, minmaf = 0.3, BPPARAM = BiocParallel::bpparam())
+zs4manyYs(se, BPPARAM = BiocParallel::bpparam())
 }
 \arguments{
 \item{se}{RangedSummarizedExperiment}
-
-\item{seq4mol}{quantile of rowSds(assay(se)) at which to filter away features with low variability over samples}
-
-\item{minmaf}{lower bound on MAF for genotype calls}
 
 \item{BPPARAM}{instance of BiocParallelParam to control parallel execution over genotype calls}
 }
@@ -22,31 +18,21 @@ matrix with rows corresponding to molecular features and columns corresponding t
 use procedure tailored to multiple responses for a fixed design matrix
 }
 \examples{
-data(geuv19)
-sds = MatrixGenerics::rowSds(assay(geuv19))
+data(geuv19xse)
+sds = MatrixGenerics::rowSds(assay(geuv19xse))
+print(quantile(sds))
 BiocParallel::register(BiocParallel::SerialParam())
-mafs = maf(colData(geuv19)) # only snps here
-mins = apply(data.matrix(as.data.frame(colData(geuv19))), 2, min, na.rm=TRUE) # some -1 values
+mafs = maf(geuv19xse)
+mins = apply(data.matrix(mcols(getCalls(geuv19xse))), 1, min, na.rm=TRUE) # some -1 values
 print(quantile(mins))
-colData(geuv19) = colData(geuv19)[,which(mafs>.25 & mins > -1)]
-selz = zs4manyYs(geuv19, minmaf = median(mafs))
-print(dim(selz))
-print(selz[1:5,1:5])
-# include adjustment for sex
-data(geuv19)
+lk = filterCalls(geuv19xse, which(mafs>.25 & mins > -1))
+lk = lk[which(sds>median(sds, na.rm=TRUE)),]
+chk1 = zs4manyYs(lk)
 data(geuv19_samples)
-sds = rowSds(assay(geuv19), na.rm=TRUE)
-qq = quantile(sds, .8)
-ok = which(sds > qq)
-lk = geuv19[ok,]
-mafs = maf(colData(lk)) # only snps here
-mins = apply(data.matrix(as.data.frame(colData(lk))), 2, min, na.rm=TRUE) # some -1 values
-colData(lk) = colData(lk)[,which(mafs>.25 & mins > -1)]
 namedSex = geuv19_samples$Sex
 names(namedSex) = geuv19_samples[["Sample name"]]
-snpn = colnames(colData(lk))
 lk$Sex = namedSex[colnames(lk)]
 table(lk$Sex)
-metadata(lk) = list(nonCallVars="Sex")
-run2 <- zs4manyYs(lk, seq4mol = 0.5, minmaf = .3)
+chk2 <- zs4manyYs(lk) # use covariate
+plot(as.numeric(chk2), as.numeric(chk1))
 }

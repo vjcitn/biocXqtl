@@ -34,18 +34,18 @@ to association test procedures.
 
 ## Basic data
 
-`geuv19` is a RangedSummarizedExperiment derived
+`geuv19xse` is an extended RangedSummarizedExperiment derived
 from the [GeuvadisTranscriptExpr](https://bioconductor.org/package/GeuvadisTranscriptExpr)
 package.  The assay component provides transcript level counts.  Genotypes
-are available in the colData.
+are available through the getCalls method.
 
 ```{r do1, message=FALSE}
 library(biocXqtl)
-data(geuv19)
-geuv19
-assay(geuv19[1:3,1:4])
-rowRanges(geuv19[1:3,])
-colData(geuv19)[1:3,1:4]
+data(geuv19xse)
+geuv19xse
+assay(geuv19xse[1:3,1:4])
+rowRanges(geuv19xse[1:3,])
+getCalls(geuv19xse)[1:3,1:4]
 ```
 
 ## Filtering and testing with `bind_Zs`
@@ -55,20 +55,17 @@ simplest assessment of molecular QTLs involves fitting
 a linear model to assess additive association of minor
 allele dose with the molecular response.  From
 an organizational viewpoint, a simple approach
-is to start and end with a RangedSummarizedExperiment
-instance.  `bind_Zs` carries this out for
-the situation in which genotype calls are
-managed in a natural way in colData.
+is to start and end with an XqtlExperiment.
+rowRanges will be updated to include Z-scores
+for tests of association of each variant with each molecular feature.
 
 ```{r do2}
-m = maf(colData(geuv19))
-mins = apply(data.matrix(as.data.frame(colData(geuv19))), 2, min, na.rm=TRUE)
+m = maf(geuv19xse)
+mins = apply(data.matrix(mcols(getCalls(geuv19xse))), 1, min, na.rm=TRUE)
 ok = which(m > .3 & mins > -1)   # very small sample size
-limg = geuv19[1:100,]
-colData(limg) = colData(limg)[,ok]
-limg = bind_Zs(limg, 
-   colselector=function(se) colnames(colData(se)))
-limg
+limg = filterCalls(geuv19xse[1:100,], ok)
+limg = bind_Zs(limg)
+rowRanges(limg)[1:3,7:10]
 ```
 
 All the Z-scores for tests of association are in the rowRanges
@@ -78,7 +75,7 @@ shows a band of transcripts with all zero counts.  Very light
 tiles correspond to negative Z-scores, dark tiles to positive.
 
 ```{r lklll}
-zs = data.matrix(as.data.frame(mcols(rowRanges(limg))[,-c(1:6)]))
+zs = data.matrix(mcols(rowRanges(limg))[,-c(1:6)])
 zs[is.na(zs)] = 0
 heatmap(zs, Colv=NA, scale="none")
 ```
@@ -92,7 +89,7 @@ interpretation of the Z-score.
 
 ```{r lkda}
 mo = function(x) as.numeric(assay(limg[x,]))
-sn = function(x) as.numeric(colData(limg)[,x])
+sn = function(x) as.numeric(data.matrix(mcols(getCalls(limg)[x,])))
 beeswarm::beeswarm(jitter(mo("ENST00000529442"))~sn("snp_19_19631444"))
 ```
 
@@ -102,15 +99,15 @@ An interactive comprehensive overview of filtered statistics
 can be made.  For this illustration we start from scratch.
 
 ```{r demoplotly}
-data(geuv19)
-sds = rowSds(assay(geuv19), na.rm=TRUE)
+data(geuv19xse)
+sds = rowSds(assay(geuv19xse), na.rm=TRUE)
 qq = quantile(sds, .8)
 ok = which(sds > qq)
-lk = geuv19[ok,]
-mafs = maf(colData(lk)) # only snps here
-mins = apply(data.matrix(as.data.frame(colData(lk))), 2, min, na.rm=TRUE) # some -1 values
-colData(lk) = colData(lk)[,which(mafs>.25 & mins > -1)]
-run1 <- bind_Zs(lk, colselector = function(se) colnames(colData(se)))
+lk = geuv19xse[ok,]
+mafs = maf(lk) # only snps here
+mins = apply(data.matrix(mcols(getCalls(lk))), 1, min, na.rm=TRUE) # some -1 values
+lk = filterCalls(lk, which(mafs>.25 & mins > -1))
+run1 <- bind_Zs(lk)
 viz_stats(run1)
 ```
 
@@ -118,32 +115,27 @@ Zoom and axis restoration are available with standard plotly controls.
 
 ## Adding a covariatae
 
-`bind_Zs` will use the covariate information when a metadata
-component `nonCallVars` is present and coincides with
-a set of colData variables.  All colData variables not listed
-in `nonCallVars` in metadata will be regarded as genotype calls.
+`bind_Zs` will use the covariate information present in colData().
 
 For GEUVADIS data in GeuvadisTranscriptExpr, we have collected
 sample-level information on sex.  Again we start from scratch,
 filter, add the covariate information, and compute tests.
 
 ```{r addsex}
-data(geuv19)
+data(geuv19xse)
 data(geuv19_samples)
-sds = rowSds(assay(geuv19), na.rm=TRUE)
+sds = rowSds(assay(geuv19xse), na.rm=TRUE)
 qq = quantile(sds, .8)
 ok = which(sds > qq)
-lk = geuv19[ok,]
-mafs = maf(colData(lk)) # only snps here
-mins = apply(data.matrix(as.data.frame(colData(lk))), 2, min, na.rm=TRUE) # some -1 values
-colData(lk) = colData(lk)[,which(mafs>.25 & mins > -1)]
+lk = geuv19xse[ok,]
+mafs = maf(lk)
+mins = apply(data.matrix(mcols(getCalls(lk))), 1, min, na.rm=TRUE) # some -1 values
+lk = filterCalls(lk,which(mafs>.25 & mins > -1))
 namedSex = geuv19_samples$Sex
 names(namedSex) = geuv19_samples[["Sample name"]]
-snpn = colnames(colData(lk))
 lk$Sex = namedSex[colnames(lk)]
 table(lk$Sex)
-metadata(lk) = list(nonCallVars="Sex")
-run2 <- bind_Zs(lk, colselector = function(se) snpn)  # filtered snp names
+run2 <- bind_Zs(lk)
 ```
 
 The following display shows that there are SNP:transcript

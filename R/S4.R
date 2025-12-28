@@ -1,5 +1,6 @@
 
 #' extend RangedSummarizedExperiment to include genotype calls in a GRanges
+#' @rawNamespace importFrom("methods", "callNextMethod", "new", "slot", "slot<-")
 #' @note We use RangedSummarizedExperiment to ensure we can identify genomic
 #' distance between molecular features and variants
 #' @examples

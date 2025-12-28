@@ -15,6 +15,12 @@
 #' @format data.frame
 "geuv19_samples"
 
+#' SummarizedExperiment from MAGE
+#' @docType data
+#' @usage data(mageSE_19)
+#' @format SummarizedExperiment
+"mageSE_19"
+
 #' a RangedSummarizedExperiment with data from GeuvadisTranscriptExpr, in XqtlExperiment format
 #' @docType data
 #' @usage data(geuv19xse)
