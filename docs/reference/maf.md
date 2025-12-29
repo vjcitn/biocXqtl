@@ -22,4 +22,14 @@ maf(xse)
 
 </div>
 
+<div class="section level2">
+
+## Arguments
+
+-   xse:
+
+    XqtlExperiment instance
+
+</div>
+
 </div>

@@ -23,4 +23,14 @@ show(object)
 
 </div>
 
+<div class="section level2">
+
+## Arguments
+
+-   object:
+
+    instance of XqtlExperiment
+
+</div>
+
 </div>

@@ -383,8 +383,8 @@ system.time(zzz <- zs4manyYs(mxx))
 
     ## some variants have MAF > 0.5, omitting
 
-    ##    user  system elapsed 
-    ## 993.316   3.391 252.007
+    ##     user   system  elapsed 
+    ## 1244.353    2.629  158.265
 
 Here’s a helper function to visualize one association.
 
@@ -403,6 +403,23 @@ onebox(mxx, title="MAGE eQTL")
 </div>
 
 ![](biocXqtl_files/figure-html/helper-1.png)
+
+We can also visualize interactively:
+
+<div id="cb30" class="sourceCode">
+
+``` r
+mcols(rowRanges(mxx)) = cbind(mcols(rowRanges(mxx)), zzz)
+viz_stats(mxx, midchop=7)
+```
+
+</div>
+
+<div id="htmlwidget-e5c8c404fe174e4c81bd"
+class="plotly html-widget html-fill-item"
+style="width:700px;height:432.632880098888px;">
+
+</div>
 
 </div>
 

@@ -97,8 +97,10 @@ summary(as.numeric(allz))
  if (requireNamespace("MASS")) {
  nbz = function(x,y) { 
  # error messages will be thrown from glm ... maybe condition to allow warning/error
-   f = tryCatch(MASS::glm.nb(y~x, data=data.frame(y=y, x=x[,-1])), # switch to -1 here to allow covariates
-            error=function(e) return(list(coefficients=NA, se=NA) ))  # getzs adds column of 1s
+   f = tryCatch(MASS::glm.nb(y~x, data=data.frame(y=y, x=x[,-1])), 
+                                                 # switch to -1 above to allow covariates
+            error=function(e) return(list(coefficients=NA, se=NA) ))  # getzs adds
+                                                                      # column of 1s
    #if (inherits(f, "try-error")) return(list(coefficients=NA, se=NA))
    dat = summary(f)$coefficients
    list(coefficients=dat[,1], se=dat[,2])
