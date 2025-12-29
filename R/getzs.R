@@ -25,8 +25,10 @@
 #'  if (requireNamespace("MASS")) {
 #'  nbz = function(x,y) { 
 #'  # error messages will be thrown from glm ... maybe condition to allow warning/error
-#'    f = tryCatch(MASS::glm.nb(y~x, data=data.frame(y=y, x=x[,-1])), # switch to -1 here to allow covariates
-#'             error=function(e) return(list(coefficients=NA, se=NA) ))  # getzs adds column of 1s
+#'    f = tryCatch(MASS::glm.nb(y~x, data=data.frame(y=y, x=x[,-1])), 
+#'                                                  # switch to -1 above to allow covariates
+#'             error=function(e) return(list(coefficients=NA, se=NA) ))  # getzs adds
+#'                                                                       # column of 1s
 #'    #if (inherits(f, "try-error")) return(list(coefficients=NA, se=NA))
 #'    dat = summary(f)$coefficients
 #'    list(coefficients=dat[,1], se=dat[,2])
@@ -38,7 +40,8 @@
 #'  }
 #' }
 #' @export
-getzs = function(molec, calls, covdf = data.frame(), statfun = function(x,y) RcppEigen::fastLmPure(X=x, y=y)) {
+getzs = function(molec, calls, covdf = data.frame(), 
+    statfun = function(x,y) RcppEigen::fastLmPure(X=x, y=y)) {
    stopifnot(ncol(molec) == nrow(calls))
    nmolec = nrow(molec)
    ncalls = ncol(calls)

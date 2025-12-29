@@ -6,6 +6,9 @@
 \usage{
 \S4method{show}{XqtlExperiment}(object)
 }
+\arguments{
+\item{object}{instance of XqtlExperiment}
+}
 \description{
 present concise view of XqtlExperiment
 }

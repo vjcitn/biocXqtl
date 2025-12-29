@@ -6,6 +6,9 @@
 \usage{
 maf(xse)
 }
+\arguments{
+\item{xse}{XqtlExperiment instance}
+}
 \description{
 compute putative minor allele frequency for XqtlExperiment
 }

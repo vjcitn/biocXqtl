@@ -16,6 +16,7 @@ setClass("XqtlExperiment", contains="RangedSummarizedExperiment",
 
 #' present concise view of XqtlExperiment
 #' @rawNamespace import(BiocGenerics, except=c(Position))
+#' @param object instance of XqtlExperiment
 #' @export
 setMethod("show", "XqtlExperiment", function(object) {
  callNextMethod()
@@ -51,6 +52,7 @@ XqtlExperiment = function(se, calls) {
 getCalls = function(xse) slot(xse, "calls")
 
 #' compute putative minor allele frequency for XqtlExperiment
+#' @param xse XqtlExperiment instance
 #' @export
 maf = function(xse) apply(mcols(getCalls(xse)),1, function(x) sum(x)/(2*length(x)))
 

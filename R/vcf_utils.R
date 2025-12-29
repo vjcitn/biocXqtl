@@ -116,6 +116,7 @@ filterVcfByGenotypeCounts <- function(
 
 #' Count genotypes across samples for each variant
 #'
+#' @importFrom S4Vectors DataFrame
 #' @param gt matrix of genotype calls (variants x samples) with form "0|0" or "0/0",
 #' as produced by VariantAnnotion::geno applied to a VCF object
 #' @return DataFrame with counts for each genotype category
@@ -163,10 +164,12 @@ countGenotypes <- function(gt) {
 #' @export
 countGenotypesVectorized <- function(gt) {
     
-    # Convert to character matrix if needed
-    if (is(gt, "matrix")) {
-        gt <- as.matrix(gt)
-    }
+   stopifnot(inherits(gt, "matrix"))
+   if (!inherits(gt[1,1], "character")) gt[] = as.character(gt)
+#    # Convert to character matrix if needed
+#    if (is(gt, "matrix")) {
+#        gt <- as.matrix(gt)
+#    }
     
     # Count genotypes using apply
     counts <- t(apply(gt, 1, function(row) {

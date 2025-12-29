@@ -24,7 +24,7 @@ minorAlleleCounts = function(vcfpath, region = GRanges(c("19:1-100000","19:10000
  rr = lapply(dat, function(x) x$rowRanges)
  mc = unlist(unname(GRangesList(rr)))
  ans = do.call(rbind, lapply(dat, function(x) x$GENO$GT))
- nans = matrix(numeric(1), nr=nrow(ans), nc=ncol(ans))
+ nans = matrix(numeric(1), nrow=nrow(ans), ncol=ncol(ans))
  nans[] = rcnt(as.character(ans))
  colnames(nans) = colnames(ans)
  mcols(mc) = nans
