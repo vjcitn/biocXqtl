@@ -3,6 +3,7 @@
 export(XqtlExperiment)
 export(add_calls_from_vcf)
 export(bind_Zs)
+export(bind_Zs_old)
 export(countGenotypes)
 export(countGenotypesVectorized)
 export(demo_vcf)

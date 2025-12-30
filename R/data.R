@@ -32,3 +32,9 @@
 #' rowRanges(geuv19xse[1:3,])
 "geuv19xse"
 
+#' a GRanges tiling GRCh38
+#' @docType data
+#' @note Created with `GenomicRanges::tileGenome(BSgenome.Hsapiens.UCSC.hg38)`
+#' @usage data(tiles38)
+#' @format GRanges
+"tiles38"

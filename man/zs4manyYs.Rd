@@ -4,10 +4,12 @@
 \alias{zs4manyYs}
 \title{use procedure tailored to multiple responses for a fixed design matrix}
 \usage{
-zs4manyYs(se, BPPARAM = BiocParallel::bpparam())
+zs4manyYs(se, omit.hi.maf = FALSE, BPPARAM = BiocParallel::bpparam())
 }
 \arguments{
 \item{se}{RangedSummarizedExperiment}
+
+\item{omit.hi.maf}{logical(1) if TRUE, variants for which MAF exceeds 0.5 are omitted}
 
 \item{BPPARAM}{instance of BiocParallelParam to control parallel execution over genotype calls}
 }

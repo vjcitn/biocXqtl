@@ -81,7 +81,7 @@ getzs = function(molec, calls, covdf = data.frame(),
 #' plot(plpp2tx~jitter(hiz), xlab="snp at 19:5694231", ylab="counts for a transcript of PLPP2")
 #' summary(lm(plpp2tx~hiz))
 #' @export
-bind_Zs = function(se) {
+bind_Zs_old = function(se) {
   molec = as.matrix(assay(se))
   calls = t(data.matrix(mcols(getCalls(se))))
   covdf = as.data.frame(colData(se))  # has zero columns unless a covariate is present and will be used

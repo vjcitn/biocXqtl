@@ -30,3 +30,13 @@ test_that("bind_Zs result as expected", {
   expect_equal(mcols(rowRanges(lk))[1,1:16], targ_mcrow1)
 })
 
+newdim = c(20,142)
+test_that("omit.hi.maf works", {
+  data(geuv19xse)
+  lk = geuv19xse[1:20,]
+  mafs = maf(lk) 
+  mins = apply(data.matrix(mcols(getCalls(lk))), 1, min, na.rm=TRUE) # some -1 values
+  lk = filterCalls(lk,which(mafs>.25 & mins > -1))
+  lk = bind_Zs(lk, omit.hi.maf=TRUE)
+  expect_equal(newdim, dim(mcols(lk)))
+})
