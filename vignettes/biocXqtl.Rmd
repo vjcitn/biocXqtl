@@ -163,6 +163,8 @@ We have acquired the "DESeq2" gene quantifications from
 the MAGE archive, and a selection of `release` genotypes
 from the associated cell lines.
 
+## Data on expression and genotype
+
 The expression data:
 ```{r theex}
 data(mageSE_19)
@@ -176,6 +178,8 @@ head(samples(h))
 length(intersect(samples(h), colnames(mageSE_19)))
 ```
 
+## Building an XqtlExperiment
+
 We will focus on SNVs but the genotype information
 has other types of variants.
 
@@ -188,6 +192,8 @@ colData(mxx) = NULL
 The last command there allows us to compute crude measures of association.
 If we populate colData with covariate information, test procedures
 in the package will incorporate it.
+
+## Creating association statistics with visualizations
 
 The following step uses C++ modules to compute association tests for
 all genotypes and all gene expression measures in mageSE_19.
@@ -208,6 +214,33 @@ onebox(mxx, title="MAGE eQTL")
 
 We can also visualize interactively:
 ```{r doviz2}
+mcols(rowRanges(mxx)) = cbind(mcols(rowRanges(mxx)), zzz)
+viz_stats(mxx, midchop=7)
+```
+
+## Covariate adjustment
+
+First we reanalyze with adjustment for continental group.
+
+```{r redo}
+data(mageSE_19)
+cd = colData(mageSE_19)
+rowRanges(mxx) = rowRanges(mxx)[,1:6]
+mxx$continent = cd$continentalGroup
+system.time(zzz <- zs4manyYs(mxx))
+mcols(rowRanges(mxx)) = cbind(mcols(rowRanges(mxx)), zzz)
+viz_stats(mxx, midchop=7)
+```
+
+Then we add sex as well.
+
+```{r redo2}
+data(mageSE_19)
+cd = colData(mageSE_19)
+rowRanges(mxx) = rowRanges(mxx)[,1:6]
+mxx$continent = cd$continentalGroup
+mxx$sex = cd$sex
+system.time(zzz <- zs4manyYs(mxx))
 mcols(rowRanges(mxx)) = cbind(mcols(rowRanges(mxx)), zzz)
 viz_stats(mxx, midchop=7)
 ```
