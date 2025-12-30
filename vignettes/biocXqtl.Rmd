@@ -61,8 +61,11 @@ for tests of association of each variant with each molecular feature.
 
 ```{r do2}
 m = maf(geuv19xse)
-mins = apply(data.matrix(mcols(getCalls(geuv19xse))), 1, min, na.rm=TRUE)
-ok = which(m > .3 & mins > -1)   # very small sample size
+mins = apply(data.matrix(cc <- mcols(getCalls(geuv19xse))), 1, min, na.rm=TRUE)
+# also ensure that all possible genotype classes are seen 
+ccc = data.matrix(cc)
+tt = apply(ccc,1,function(x)length(table(x)))
+ok = which(m > .3 & mins > -1 & tt == 3)   # very small sample size
 limg = filterCalls(geuv19xse[1:100,], ok)
 limg = bind_Zs(limg)
 rowRanges(limg)[1:3,7:10]
@@ -105,8 +108,10 @@ qq = quantile(sds, .8)
 ok = which(sds > qq)
 lk = geuv19xse[ok,]
 mafs = maf(lk) # only snps here
-mins = apply(data.matrix(mcols(getCalls(lk))), 1, min, na.rm=TRUE) # some -1 values
-lk = filterCalls(lk, which(mafs>.25 & mins > -1))
+mins = apply(ccc <- data.matrix(mcols(getCalls(lk))), 1, min, na.rm=TRUE) # some -1 values
+tt = apply(ccc,1,function(x)length(table(x)))
+ok = which(m > .3 & mins > -1 & tt == 3)   # very small sample size
+lk = filterCalls(lk, ok)
 run1 <- bind_Zs(lk)
 viz_stats(run1)
 ```
@@ -129,8 +134,9 @@ qq = quantile(sds, .8)
 ok = which(sds > qq)
 lk = geuv19xse[ok,]
 mafs = maf(lk)
-mins = apply(data.matrix(mcols(getCalls(lk))), 1, min, na.rm=TRUE) # some -1 values
-lk = filterCalls(lk,which(mafs>.25 & mins > -1))
+mins = apply(ccc <- data.matrix(mcols(getCalls(lk))), 1, min, na.rm=TRUE) # some -1 values
+tt = apply(ccc,1,function(x)length(table(x)))
+lk = filterCalls(lk,which(mafs>.3 & mins > -1 & tt == 3))
 namedSex = geuv19_samples$Sex
 names(namedSex) = geuv19_samples[["Sample name"]]
 lk$Sex = namedSex[colnames(lk)]
@@ -189,7 +195,7 @@ mins  = minorAlleleCounts(demo_vcf(), GRanges("19:1-50000000"))
 mxx = XqtlExperiment(mageSE_19, mins)
 colData(mxx) = NULL
 ```
-The last command there allows us to compute crude measures of association.
+The last command above allows us to compute crude measures of association.
 If we populate colData with covariate information, test procedures
 in the package will incorporate it.
 
@@ -198,24 +204,29 @@ in the package will incorporate it.
 The following step uses C++ modules to compute association tests for
 all genotypes and all gene expression measures in mageSE_19.
 ```{r dotests}
-system.time(zzz <- zs4manyYs(mxx))
+sds = rowSds(assay(mxx), na.rm=TRUE)
+qq = quantile(sds, .95)
+ok = which(sds > qq)
+system.time(zzz <- zs4manyYs(mxx[ok,]))
 ```
 
 Here's a helper function to visualize one association.
 ```{r helper}
-onebox = function(xse, mfeat="ENSG00000172270", vnt="rs151237303", title) {
+onebox = function(xse, mfeat="ENSG00000174837", vnt="rs4897932", title) {
 if (missing(title)) title=""
 boxplot(split(as.numeric(assay(xse[mfeat,])),
    as.numeric(data.matrix(mcols(getCalls(xse)[vnt,])))),
    ylab=mfeat, xlab=vnt, main=title)
 }
-onebox(mxx, title="MAGE eQTL")
+onebox(mxx[ok,], title="MAGE eQTL")
 ```
 
 We can also visualize interactively:
 ```{r doviz2}
-mcols(rowRanges(mxx)) = cbind(mcols(rowRanges(mxx)), zzz)
-viz_stats(mxx, midchop=7)
+tmpm = cbind(mcols(rowRanges(mxx[ok,])), zzz)
+tmp = mxx[ok,]
+mcols(tmp) = tmpm
+viz_stats(tmp, midchop=5)
 ```
 
 ## Covariate adjustment
@@ -224,20 +235,31 @@ First we reanalyze with adjustment for continental group.
 
 ```{r redo}
 data(mageSE_19)
+sds = rowSds(assay(mageSE_19), na.rm=TRUE)
+qq = quantile(sds, .9)
+ok = which(sds > qq)
 cd = colData(mageSE_19)
+mins  = minorAlleleCounts(demo_vcf(), GRanges("19:1-3000000"))
+mxx = XqtlExperiment(mageSE_19[ok,], mins)
+print(mxx)
+colData(mxx)=NULL
 rowRanges(mxx) = rowRanges(mxx)[,1:6]
 mxx$continent = cd$continentalGroup
 system.time(zzz <- zs4manyYs(mxx))
 mcols(rowRanges(mxx)) = cbind(mcols(rowRanges(mxx)), zzz)
-viz_stats(mxx, midchop=7)
+viz_stats(mxx, midchop=5)
 ```
 
 Then we add sex as well.
 
 ```{r redo2}
 data(mageSE_19)
+sds = rowSds(assay(mageSE_19), na.rm=TRUE)
+qq = quantile(sds, .9)
+ok = which(sds > qq)
 cd = colData(mageSE_19)
-rowRanges(mxx) = rowRanges(mxx)[,1:6]
+mins  = minorAlleleCounts(demo_vcf(), GRanges("19:1-3000000"))
+mxx = XqtlExperiment(mageSE_19[ok,], mins)
 mxx$continent = cd$continentalGroup
 mxx$sex = cd$sex
 system.time(zzz <- zs4manyYs(mxx))

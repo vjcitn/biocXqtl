@@ -50,8 +50,12 @@ plotly display
 -   `XqtlExperiment()` : XqtlExperiment constructor
 -   `add_calls_from_vcf()` : add minor allele counts from a VCF to
     SummarizedExperiment with common samples
--   `bind_Zs()` : bind a matrix of Z statistics created with getzs to
-    the rowRanges of a SummarizedExperiment
+-   `add_scores()` : internal function to combine new xQTL test results
+    with existing XqtlExperiment instance
+-   `bind_Zs()` : compute Z-statistics for xQTL association and bind
+    them to the input x-ome+genome XqtlExperiment
+-   `bind_Zs_old()` : bind a matrix of Z statistics created with getzs
+    to the rowRanges of a SummarizedExperiment
 -   `countGenotypes()` : Count genotypes across samples for each variant
 -   `countGenotypesVectorized()` : More efficient vectorized version for
     large datasets
@@ -76,6 +80,7 @@ plotly display
 -   `minorAlleleCounts()` : produce data.frame with minor allele counts
     in a region, from VCF
 -   `show(<XqtlExperiment>)` : present concise view of XqtlExperiment
+-   `tiles38` : a GRanges tiling GRCh38
 -   `viz_stats()` : produce a plotly display of statistics of xQTL
     association
 -   `zs4manyYs()` : use procedure tailored to multiple responses for a

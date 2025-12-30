@@ -15,7 +15,7 @@ use procedure tailored to multiple responses for a fixed design matrix
 <div class="sourceCode">
 
 ``` r
-zs4manyYs(se, BPPARAM = BiocParallel::bpparam())
+zs4manyYs(se, omit.hi.maf = FALSE, BPPARAM = BiocParallel::bpparam())
 ```
 
 </div>
@@ -29,6 +29,10 @@ zs4manyYs(se, BPPARAM = BiocParallel::bpparam())
 -   se:
 
     RangedSummarizedExperiment
+
+-   omit.hi.maf:
+
+    logical(1) if TRUE, variants for which MAF exceeds 0.5 are omitted
 
 -   BPPARAM:
 
@@ -67,7 +71,7 @@ print(quantile(mins))
 lk = filterCalls(geuv19xse, which(mafs>.25 & mins > -1))
 lk = lk[which(sds>median(sds, na.rm=TRUE)),]
 chk1 = zs4manyYs(lk)
-#> some variants have MAF > 0.5, omitting
+#> some variants have MAF > 0.5 
 data(geuv19_samples)
 namedSex = geuv19_samples$Sex
 names(namedSex) = geuv19_samples[["Sample name"]]
@@ -77,7 +81,7 @@ table(lk$Sex)
 #> female   male 
 #>     46     45 
 chk2 <- zs4manyYs(lk) # use covariate
-#> some variants have MAF > 0.5, omitting
+#> some variants have MAF > 0.5 
 plot(as.numeric(chk2), as.numeric(chk1))
 ```
 

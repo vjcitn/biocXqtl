@@ -8,7 +8,9 @@
 <url><loc>https://github.com/vjcitn/biocXqtl/reference/XqtlExperiment-class.html</loc></url>
 <url><loc>https://github.com/vjcitn/biocXqtl/reference/XqtlExperiment.html</loc></url>
 <url><loc>https://github.com/vjcitn/biocXqtl/reference/add_calls_from_vcf.html</loc></url>
+<url><loc>https://github.com/vjcitn/biocXqtl/reference/add_scores.html</loc></url>
 <url><loc>https://github.com/vjcitn/biocXqtl/reference/bind_Zs.html</loc></url>
+<url><loc>https://github.com/vjcitn/biocXqtl/reference/bind_Zs_old.html</loc></url>
 <url><loc>https://github.com/vjcitn/biocXqtl/reference/biocXqtl-package.html</loc></url>
 <url><loc>https://github.com/vjcitn/biocXqtl/reference/countGenotypes.html</loc></url>
 <url><loc>https://github.com/vjcitn/biocXqtl/reference/countGenotypesVectorized.html</loc></url>
@@ -28,6 +30,7 @@
 <url><loc>https://github.com/vjcitn/biocXqtl/reference/mageSE_19.html</loc></url>
 <url><loc>https://github.com/vjcitn/biocXqtl/reference/minorAlleleCounts.html</loc></url>
 <url><loc>https://github.com/vjcitn/biocXqtl/reference/show-XqtlExperiment-method.html</loc></url>
+<url><loc>https://github.com/vjcitn/biocXqtl/reference/tiles38.html</loc></url>
 <url><loc>https://github.com/vjcitn/biocXqtl/reference/viz_stats.html</loc></url>
 <url><loc>https://github.com/vjcitn/biocXqtl/reference/zs4manyYs.html</loc></url>
 </urlset>

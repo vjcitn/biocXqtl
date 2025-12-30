@@ -1,11 +1,11 @@
 <div id="main" class="col-md-9" role="main">
 
-# compute Z-statistics for xQTL association and bind them to the input x-ome+genome XqtlExperiment
+# bind a matrix of Z statistics created with getzs to the rowRanges of a SummarizedExperiment
 
 <div class="ref-description section level2">
 
-compute Z-statistics for xQTL association and bind them to the input
-x-ome+genome XqtlExperiment
+bind a matrix of Z statistics created with getzs to the rowRanges of a
+SummarizedExperiment
 
 </div>
 
@@ -16,7 +16,7 @@ x-ome+genome XqtlExperiment
 <div class="sourceCode">
 
 ``` r
-bind_Zs(xse, omit.hi.maf = FALSE, BPPARAM = BiocParallel::bpparam())
+bind_Zs_old(se)
 ```
 
 </div>
@@ -27,17 +27,21 @@ bind_Zs(xse, omit.hi.maf = FALSE, BPPARAM = BiocParallel::bpparam())
 
 ## Arguments
 
--   xse:
+-   se:
 
-    XqtlExperiment instance
+    SummarizedExperiment assumed to have molecular phenotype data in
+    assay. A metadata component (list element) named nonCallVars will be
+    checked and associated colData elements will be used as covariates
+    in models for effect of dosage of minor allele
 
--   omit.hi.maf:
+</div>
 
-    logical(1), passed to zs4manyYs, defaults to FALSE
+<div class="section level2">
 
--   BPPARAM:
+## Note
 
-    instance of BiocParallelParam
+All variables in colData(se) will be used as covariates in association
+tests. Use \`colData(se) &lt;- NULL\` to eliminate covariate adjustment.
 
 </div>
 

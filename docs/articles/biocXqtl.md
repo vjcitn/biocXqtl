@@ -141,10 +141,22 @@ of each variant with each molecular feature.
 
 ``` r
 m = maf(geuv19xse)
-mins = apply(data.matrix(mcols(getCalls(geuv19xse))), 1, min, na.rm=TRUE)
-ok = which(m > .3 & mins > -1)   # very small sample size
+mins = apply(data.matrix(cc <- mcols(getCalls(geuv19xse))), 1, min, na.rm=TRUE)
+# also ensure that all possible genotype classes are seen 
+ccc = data.matrix(cc)
+tt = apply(ccc,1,function(x)length(table(x)))
+ok = which(m > .3 & mins > -1 & tt == 3)   # very small sample size
 limg = filterCalls(geuv19xse[1:100,], ok)
 limg = bind_Zs(limg)
+```
+
+</div>
+
+    ## some variants have MAF > 0.5
+
+<div id="cb13" class="sourceCode">
+
+``` r
 rowRanges(limg)[1:3,7:10]
 ```
 
@@ -170,7 +182,7 @@ to annotation. A heatmap of the Z-scores shows a band of transcripts
 with all zero counts. Very light tiles correspond to negative Z-scores,
 dark tiles to positive.
 
-<div id="cb13" class="sourceCode">
+<div id="cb15" class="sourceCode">
 
 ``` r
 zs = data.matrix(mcols(rowRanges(limg))[,-c(1:6)])
@@ -192,7 +204,7 @@ With some helper functions, the basic data layout can be seen,
 illustrating violation of standard linear modeling assumptions
 underlying interpretation of the Z-score.
 
-<div id="cb14" class="sourceCode">
+<div id="cb16" class="sourceCode">
 
 ``` r
 mo = function(x) as.numeric(assay(limg[x,]))
@@ -213,7 +225,7 @@ beeswarm::beeswarm(jitter(mo("ENST00000529442"))~sn("snp_19_19631444"))
 An interactive comprehensive overview of filtered statistics can be
 made. For this illustration we start from scratch.
 
-<div id="cb15" class="sourceCode">
+<div id="cb17" class="sourceCode">
 
 ``` r
 data(geuv19xse)
@@ -222,9 +234,20 @@ qq = quantile(sds, .8)
 ok = which(sds > qq)
 lk = geuv19xse[ok,]
 mafs = maf(lk) # only snps here
-mins = apply(data.matrix(mcols(getCalls(lk))), 1, min, na.rm=TRUE) # some -1 values
-lk = filterCalls(lk, which(mafs>.25 & mins > -1))
+mins = apply(ccc <- data.matrix(mcols(getCalls(lk))), 1, min, na.rm=TRUE) # some -1 values
+tt = apply(ccc,1,function(x)length(table(x)))
+ok = which(m > .3 & mins > -1 & tt == 3)   # very small sample size
+lk = filterCalls(lk, ok)
 run1 <- bind_Zs(lk)
+```
+
+</div>
+
+    ## some variants have MAF > 0.5
+
+<div id="cb19" class="sourceCode">
+
+``` r
 viz_stats(run1)
 ```
 
@@ -250,7 +273,7 @@ For GEUVADIS data in GeuvadisTranscriptExpr, we have collected
 sample-level information on sex. Again we start from scratch, filter,
 add the covariate information, and compute tests.
 
-<div id="cb16" class="sourceCode">
+<div id="cb20" class="sourceCode">
 
 ``` r
 data(geuv19xse)
@@ -260,8 +283,9 @@ qq = quantile(sds, .8)
 ok = which(sds > qq)
 lk = geuv19xse[ok,]
 mafs = maf(lk)
-mins = apply(data.matrix(mcols(getCalls(lk))), 1, min, na.rm=TRUE) # some -1 values
-lk = filterCalls(lk,which(mafs>.25 & mins > -1))
+mins = apply(ccc <- data.matrix(mcols(getCalls(lk))), 1, min, na.rm=TRUE) # some -1 values
+tt = apply(ccc,1,function(x)length(table(x)))
+lk = filterCalls(lk,which(mafs>.3 & mins > -1 & tt == 3))
 namedSex = geuv19_samples$Sex
 names(namedSex) = geuv19_samples[["Sample name"]]
 lk$Sex = namedSex[colnames(lk)]
@@ -274,7 +298,7 @@ table(lk$Sex)
     ## female   male 
     ##     46     45
 
-<div id="cb18" class="sourceCode">
+<div id="cb22" class="sourceCode">
 
 ``` r
 run2 <- bind_Zs(lk)
@@ -282,11 +306,13 @@ run2 <- bind_Zs(lk)
 
 </div>
 
+    ## some variants have MAF > 0.5
+
 The following display shows that there are SNP:transcript associations
 for which adjustment for sample sex can have appreciable effects on
 Z-score estimates when absolute value of Z is less than 3 or so.
 
-<div id="cb19" class="sourceCode">
+<div id="cb24" class="sourceCode">
 
 ``` r
 m2 = data.matrix(as.data.frame(mcols(run2)[,-c(1:6)]))
@@ -317,9 +343,13 @@ We have acquired the “DESeq2” gene quantifications from the MAGE
 archive, and a selection of `release` genotypes from the associated cell
 lines.
 
+<div class="section level3">
+
+### Data on expression and genotype
+
 The expression data:
 
-<div id="cb20" class="sourceCode">
+<div id="cb25" class="sourceCode">
 
 ``` r
 data(mageSE_19)
@@ -329,7 +359,7 @@ data(mageSE_19)
 
 Genotype data:
 
-<div id="cb21" class="sourceCode">
+<div id="cb26" class="sourceCode">
 
 ``` r
 dv = demo_vcf()
@@ -341,7 +371,7 @@ head(samples(h))
 
     ## [1] "HG00096" "HG00100" "HG00105" "HG00108" "HG00110" "HG00113"
 
-<div id="cb23" class="sourceCode">
+<div id="cb28" class="sourceCode">
 
 ``` r
 length(intersect(samples(h), colnames(mageSE_19)))
@@ -351,12 +381,18 @@ length(intersect(samples(h), colnames(mageSE_19)))
 
     ## [1] 731
 
+</div>
+
+<div class="section level3">
+
+### Building an XqtlExperiment
+
 We will focus on SNVs but the genotype information has other types of
 variants.
 
 Bind the minor allele counts to the expression data:
 
-<div id="cb25" class="sourceCode">
+<div id="cb30" class="sourceCode">
 
 ``` r
 mins  = minorAlleleCounts(demo_vcf(), GRanges("19:1-50000000"))
@@ -366,38 +402,47 @@ colData(mxx) = NULL
 
 </div>
 
-The last command there allows us to compute crude measures of
+The last command above allows us to compute crude measures of
 association. If we populate colData with covariate information, test
 procedures in the package will incorporate it.
+
+</div>
+
+<div class="section level3">
+
+### Creating association statistics with visualizations
 
 The following step uses C++ modules to compute association tests for all
 genotypes and all gene expression measures in mageSE\_19.
 
-<div id="cb26" class="sourceCode">
+<div id="cb31" class="sourceCode">
 
 ``` r
-system.time(zzz <- zs4manyYs(mxx))
+sds = rowSds(assay(mxx), na.rm=TRUE)
+qq = quantile(sds, .95)
+ok = which(sds > qq)
+system.time(zzz <- zs4manyYs(mxx[ok,]))
 ```
 
 </div>
 
-    ## some variants have MAF > 0.5, omitting
+    ## some variants have MAF > 0.5
 
-    ##     user   system  elapsed 
-    ## 1244.353    2.629  158.265
+    ##    user  system elapsed 
+    ##   3.508   0.644   0.846
 
 Here’s a helper function to visualize one association.
 
-<div id="cb29" class="sourceCode">
+<div id="cb34" class="sourceCode">
 
 ``` r
-onebox = function(xse, mfeat="ENSG00000172270", vnt="rs151237303", title) {
+onebox = function(xse, mfeat="ENSG00000174837", vnt="rs4897932", title) {
 if (missing(title)) title=""
 boxplot(split(as.numeric(assay(xse[mfeat,])),
    as.numeric(data.matrix(mcols(getCalls(xse)[vnt,])))),
    ylab=mfeat, xlab=vnt, main=title)
 }
-onebox(mxx, title="MAGE eQTL")
+onebox(mxx[ok,], title="MAGE eQTL")
 ```
 
 </div>
@@ -406,7 +451,115 @@ onebox(mxx, title="MAGE eQTL")
 
 We can also visualize interactively:
 
-<div id="cb30" class="sourceCode">
+<div id="cb35" class="sourceCode">
+
+``` r
+tmpm = cbind(mcols(rowRanges(mxx[ok,])), zzz)
+tmp = mxx[ok,]
+mcols(tmp) = tmpm
+viz_stats(tmp, midchop=5)
+```
+
+</div>
+
+<div id="htmlwidget-e5c8c404fe174e4c81bd"
+class="plotly html-widget html-fill-item"
+style="width:700px;height:432.632880098888px;">
+
+</div>
+
+</div>
+
+<div class="section level3">
+
+### Covariate adjustment
+
+First we reanalyze with adjustment for continental group.
+
+<div id="cb36" class="sourceCode">
+
+``` r
+data(mageSE_19)
+sds = rowSds(assay(mageSE_19), na.rm=TRUE)
+qq = quantile(sds, .9)
+ok = which(sds > qq)
+cd = colData(mageSE_19)
+mins  = minorAlleleCounts(demo_vcf(), GRanges("19:1-3000000"))
+mxx = XqtlExperiment(mageSE_19[ok,], mins)
+print(mxx)
+```
+
+</div>
+
+    ## class: XqtlExperiment 
+    ## dim: 138 731 
+    ## metadata(0):
+    ## assays(1): logcounts
+    ## rownames(138): ENSG00000141934 ENSG00000099812 ... ENSG00000196867
+    ##   ENSG00000268107
+    ## rowData names(6): gene_id gene_name ... symbol entrezid
+    ## colnames(731): HG00096 HG00100 ... NA21129 NA21130
+    ## colData names(13): SRA_accession internal_libraryID ...
+    ##   RNAQubitTotalAmount_ng RIN
+    ##   8465 genotype calls present.
+    ##   use getCalls() to see them with addresses.
+
+<div id="cb38" class="sourceCode">
+
+``` r
+colData(mxx)=NULL
+rowRanges(mxx) = rowRanges(mxx)[,1:6]
+mxx$continent = cd$continentalGroup
+system.time(zzz <- zs4manyYs(mxx))
+```
+
+</div>
+
+    ## some variants have MAF > 0.5
+
+    ##    user  system elapsed 
+    ##   6.994   0.860   1.327
+
+<div id="cb41" class="sourceCode">
+
+``` r
+mcols(rowRanges(mxx)) = cbind(mcols(rowRanges(mxx)), zzz)
+viz_stats(mxx, midchop=5)
+```
+
+</div>
+
+<div id="htmlwidget-36aa3d2a04d42bbc2145"
+class="plotly html-widget html-fill-item"
+style="width:700px;height:432.632880098888px;">
+
+</div>
+
+Then we add sex as well.
+
+<div id="cb42" class="sourceCode">
+
+``` r
+data(mageSE_19)
+sds = rowSds(assay(mageSE_19), na.rm=TRUE)
+qq = quantile(sds, .9)
+ok = which(sds > qq)
+cd = colData(mageSE_19)
+mins  = minorAlleleCounts(demo_vcf(), GRanges("19:1-3000000"))
+mxx = XqtlExperiment(mageSE_19[ok,], mins)
+mxx$continent = cd$continentalGroup
+mxx$sex = cd$sex
+system.time(zzz <- zs4manyYs(mxx))
+```
+
+</div>
+
+    ## some variants have MAF > 0.5
+
+    ##    user  system elapsed 
+    ##  22.733   1.298   3.493
+
+<div id="cb45" class="sourceCode">
 
 ``` r
 mcols(rowRanges(mxx)) = cbind(mcols(rowRanges(mxx)), zzz)
@@ -415,9 +568,11 @@ viz_stats(mxx, midchop=7)
 
 </div>
 
-<div id="htmlwidget-e5c8c404fe174e4c81bd"
+<div id="htmlwidget-febe03efa1a2d8d52a86"
 class="plotly html-widget html-fill-item"
 style="width:700px;height:432.632880098888px;">
+
+</div>
 
 </div>
 
