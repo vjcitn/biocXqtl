@@ -84,13 +84,61 @@ This returns a GRanges with counts in the mcols.  The
 addresses are bound with the counts.
 
 ```{r getmac}
-cnts = minorAlleleCounts(vp, region=GRanges("19:1-3000000"))
+cnts = minorAlleleCounts(vpath, region=GRanges("19:1-3000000"))
 cnts[,1:2]
+```
+
+# PLINK
+
+## Example data
+
+The data were extracted from the GWAS tutorial.
+
+```{r lkdpl, message=FALSE}
+zfi = system.file("plink", "chr19_1kglim.zip", package="biocXqtl")
+tdir = tempdir()
+unzip(zfi, exdir=tdir)
+dir(tdir)
+```
+
+## Using genio
+
+This package seems to be capable only of 'full reads'.
+
+```{r lkgenio, message=FALSE}
+library(genio)
+fi = grep("bed$", dir(tdir, full=TRUE), value=TRUE)
+dem = read_plink(fi)
+dim(dem$X)
+```
+
+## Using python `bed-reader`
+
+Here we can make targeted reads from the resource.
+
+```{r dopy, message=FALSE}
+library(reticulate)
+py_require("bed-reader")
+br = import("bed_reader")
+res = br$open_bed(fi)
+toget = tuple(0:4, 0:5)
+limread = res$read(toget)
+dim(limread)
+head(res$bp_position)
+head(res$chromosome)
+head(res$sid)
+head(res$iid)
 ```
 
 
 
+genio 
+
+
+
 # Appendix
+
+## VCF production
 
 Code to produce the demonstration VCF is
 
@@ -120,4 +168,31 @@ Read 1816698 variants
 Counting genotypes...
 Variants passing filter: 156943 / 1816698
   Mean counts - HomRef: 690.8, Het: 25.4, HomAlt: 14.4
+```
+
+## PLINK resource production
+
+Folder `GWAS/project1/data/raw` in the tutorial download has
+the relevant contents.
+
+An extract from chr19 is produced using
+```
+plink2 \
+  --pfile all_hg38 vzs \
+  --chr 19 \
+  --maf 0.1 \
+  --keep kp.txt \
+  --make-pgen vzs \
+  --allow-extra-chr \
+  --out chr19_limsamples_pp1
+```
+`kp.txt` is in `inst/plink` and is a selection of samples
+with diverse ancestries.
+
+PLINK bed-format files are produced using
+```
+plink2 \
+  --pfile chr19_limsamples_pp1 vzs \
+  --make-bed \
+  --out chr19_limsamples_maf10
 ```
