@@ -30,9 +30,9 @@ derived from output of \`aws s3 cp –no-sign-request
 s3://1000genomes/release/20130502/ALL.chr19.phase3\_shapeit2\_mvncall\_integrated\_v5a.20130502.genotypes.vcf.gz
 .\` 26 Dec 2025.
 
-Variants from positions 1-5000000 were filtered by restricting to
-samples in \`mageSE\_19\` and variants with at least 10 individuals in
-each genotype class (00, 01, 11).
+Variants were filtered by restricting to samples in \`mageSE\_19\` and
+variants with at least 10 individuals in each genotype class (00, 01,
+11).
 
 </div>
 

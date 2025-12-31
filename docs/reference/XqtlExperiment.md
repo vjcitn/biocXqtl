@@ -46,7 +46,8 @@ XqtlExperiment(se, calls)
 data(mageSE_19)
 vp = system.file("vcf", "chr19_50k.vcf.gz", package="biocXqtl")
 mp = minorAlleleCounts(vp)
-XqtlExperiment(mageSE_19, mp)
+nn = XqtlExperiment(mageSE_19, mp)
+nn
 #> class: XqtlExperiment 
 #> dim: 1377 731 
 #> metadata(0):

@@ -88,13 +88,13 @@ filtvcf <- filterVcfByGenotypeCounts(
 #> Total samples in VCF: 731
 #> Analyzing 20 samples
 #> Reading VCF...
-#> Read 8465 variants
+#> Read 127199 variants
 #> Counting genotypes...
-#> Variants passing filter: 2922 / 8465
-#>   Mean counts - HomRef: 10.8, Het: 6, HomAlt: 3.1
+#> Variants passing filter: 47851 / 127199
+#>   Mean counts - HomRef: 10.2, Het: 6.4, HomAlt: 3.4
 filtvcf
 #> class: CollapsedVCF 
-#> dim: 2922 20 
+#> dim: 47851 20 
 #> rowRanges(vcf):
 #>   GRanges with 5 metadata columns: paramRangeID, REF, ALT, QUAL, FILTER
 #> info(vcf):

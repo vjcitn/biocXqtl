@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">biocXqtl</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,36 @@
 
 </dl></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">XqtlExperiment</span><span class="op">)</span>  <span class="co"># makes nn</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> XqtlEx&gt; data(mageSE_19)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> XqtlEx&gt; vp = system.file("vcf", "chr19_50k.vcf.gz", package="biocXqtl")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> XqtlEx&gt; mp = minorAlleleCounts(vp)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> XqtlEx&gt; nn = XqtlExperiment(mageSE_19, mp)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> XqtlEx&gt; nn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class: XqtlExperiment </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dim: 1377 731 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> metadata(0):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> assays(1): logcounts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rownames(1377): ENSG00000176695 ENSG00000141934 ... ENSG00000213753</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ENSG00000099326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rowData names(6): gene_id gene_name ... symbol entrezid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> colnames(731): HG00096 HG00100 ... NA21129 NA21130</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> colData names(13): SRA_accession internal_libraryID ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   RNAQubitTotalAmount_ng RIN</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   272 genotype calls present.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   use getCalls() to see them with addresses.</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">maf</span><span class="op">(</span><span class="va">nn</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.000000 0.000000 0.000000 0.017784 0.000684 0.999316 </span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

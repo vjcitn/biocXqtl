@@ -58,7 +58,7 @@ getCalls(xmage19)[1:4,1:4]
 #>   rs559839262         0
 #>   rs372156287         0
 #>   -------
-#>   seqinfo: 1 sequence from GRCh37 genome; no seqlengths
+#>   seqinfo: 1 sequence from GRCh38 genome; no seqlengths
 ```
 
 </div>

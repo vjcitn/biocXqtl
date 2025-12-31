@@ -13,14 +13,10 @@
 -   `XqtlExperiment-class` : extend RangedSummarizedExperiment to
     include genotype calls in a GRanges
 -   `XqtlExperiment()` : XqtlExperiment constructor
--   `add_calls_from_vcf()` : add minor allele counts from a VCF to
-    SummarizedExperiment with common samples
 -   `add_scores()` : internal function to combine new xQTL test results
     with existing XqtlExperiment instance
 -   `bind_Zs()` : compute Z-statistics for xQTL association and bind
     them to the input x-ome+genome XqtlExperiment
--   `bind_Zs_old()` : bind a matrix of Z statistics created with getzs
-    to the rowRanges of a SummarizedExperiment
 -   `countGenotypes()` : Count genotypes across samples for each variant
 -   `countGenotypesVectorized()` : More efficient vectorized version for
     large datasets
@@ -33,8 +29,6 @@
 -   `filterVcfMultipleCriteria()` : Filter VCF with multiple criteria
 -   `getCalls()` : getter for genotype calls
 -   `getGenotypeSummary()` : Get genotype summary statistics
--   `getzs()` : create a matrix of Z statistics for an additive effect
-    of rare allele count in calls on molecular phenotype in molec
 -   `geuv19` : a RangedSummarizedExperiment with data from
     GeuvadisTranscriptExpr
 -   `geuv19_samples` : data frame with sample information for geuv19

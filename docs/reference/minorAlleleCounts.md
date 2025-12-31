@@ -18,7 +18,7 @@ produce data.frame with minor allele counts in a region, from VCF
 minorAlleleCounts(
   vcfpath,
   region = GRanges(c("19:1-100000", "19:100001-200000")),
-  genome = "GRCh37"
+  genome = "GRCh38"
 )
 ```
 
@@ -91,7 +91,7 @@ mp[,1:5]
 #>   rs575319884         0         0
 #>   rs543254795         0         0
 #>   -------
-#>   seqinfo: 1 sequence from GRCh37 genome; no seqlengths
+#>   seqinfo: 1 sequence from GRCh38 genome; no seqlengths
 dim(mcols(mp))
 #> [1]  272 2504
 ```
