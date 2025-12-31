@@ -31,7 +31,8 @@ setMethod("show", "XqtlExperiment", function(object) {
 #' data(mageSE_19)
 #' vp = system.file("vcf", "chr19_50k.vcf.gz", package="biocXqtl")
 #' mp = minorAlleleCounts(vp)
-#' XqtlExperiment(mageSE_19, mp)
+#' nn = XqtlExperiment(mageSE_19, mp)
+#' nn
 #' @export
 XqtlExperiment = function(se, calls) {
  okids = intersect(colnames(mcols(calls)), colnames(se))
@@ -53,6 +54,9 @@ getCalls = function(xse) slot(xse, "calls")
 
 #' compute putative minor allele frequency for XqtlExperiment
 #' @param xse XqtlExperiment instance
+#' @examples
+#' example(XqtlExperiment)  # makes nn
+#' summary(maf(nn))
 #' @export
 maf = function(xse) apply(mcols(getCalls(xse)),1, function(x) sum(x)/(2*length(x)))
 

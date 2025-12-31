@@ -7,7 +7,7 @@
 minorAlleleCounts(
   vcfpath,
   region = GRanges(c("19:1-100000", "19:100001-200000")),
-  genome = "GRCh37"
+  genome = "GRCh38"
 )
 }
 \arguments{

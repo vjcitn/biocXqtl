@@ -13,6 +13,7 @@
    litdf = data.frame(y=as.numeric(mol[1,]), snp=calls[,1], Sex=covar[,1])
 
 test_that("getzs with one covariate works", {
+   source(system.file("old", "getzs.R", package="biocXqtl"))
 # use lm for a simple model
    m1 = summary(lm(y~snp+Sex, data=litdf))
    b = m1$coefficients[2,1]
@@ -26,6 +27,7 @@ test_that("getzs with one covariate works", {
 # note that the GeuvadisTranscriptExpr/geuv19xse "counts" are expected counts from FluxCapacitor...
 # thus rounding is used below
 test_that("negative binomial fits work with covariate", { 
+  source(system.file("old", "getzs.R", package="biocXqtl"))
   nbz = function(x,y) {
   # error messages will be thrown from glm ... maybe condition to allow warning/error
     f = tryCatch(MASS::glm.nb(y~x, data=data.frame(y=y, x=x[,-1])), # switch to -1 here to allow covariates

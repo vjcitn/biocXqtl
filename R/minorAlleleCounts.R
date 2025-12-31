@@ -13,7 +13,7 @@
 #' mp[,1:5]
 #' dim(mcols(mp))
 #' @export
-minorAlleleCounts = function(vcfpath, region = GRanges(c("19:1-100000","19:100001-200000")), genome="GRCh37") {
+minorAlleleCounts = function(vcfpath, region = GRanges(c("19:1-100000","19:100001-200000")), genome="GRCh38") {
  rcnt = function (x) 
  {
      z = strsplit(x, "")

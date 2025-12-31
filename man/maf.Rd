@@ -12,3 +12,7 @@ maf(xse)
 \description{
 compute putative minor allele frequency for XqtlExperiment
 }
+\examples{
+example(XqtlExperiment)  # makes nn
+summary(maf(nn))
+}
