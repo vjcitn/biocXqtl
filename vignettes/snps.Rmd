@@ -37,17 +37,57 @@ A demonstration VCF archive is available with biocXqtl.
 The associated vcf.gz file was formed by filtering publicly
 available variants from the 1000 genomes project.
 See the Appendix for information on how the demonstration
-VCF was produced.
+VCF was produced.  A key filtering step involved limiting
+inclusion to those variants for which at least 10 individuals
+were present in each of the classes: homozygous rare, heterozygous,
+homozygous common.
 
+Setup:
 ```{r lksn1, message=FALSE}
 library(biocXqtl)
 library(VariantAnnotation)
 vpath = demo_vcf()
+```
+
+First we examine the header.
+
+```{r lkh}
 h = scanVcfHeader(vpath)
 h
 ```
 
 The header report indicates that genotypes are available for 731 individuals.
+
+Direct ingestion of VCF can consume considerable RAM.  We can select
+regions of interest and scan with inline filtering.  See the documentation
+on `ScanVcfParam` in VariantAnnotation.
+
+```{r doscan}
+library(GenomicRanges)
+p = GRanges("19:1-3000000")
+ss = ScanVcfParam(which=p)
+sc1 = scanVcf(vpath, param=ss)
+```
+
+Each range in the `ScanVcfParam` will produce a list element
+in the result of `scanVcf`.
+
+```{r lkscan}
+names(sc1[[1]])
+dim(sc1[[1]]$GENO[[1]])
+sc1[[1]]$rowRanges
+```
+
+For purposes of statistical modeling, we have a helper
+function that retrieves minor allele counts from a tabix-indexed VCF.
+This returns a GRanges with counts in the mcols.  The
+addresses are bound with the counts.
+
+```{r getmac}
+cnts = minorAlleleCounts(vp, region=GRanges("19:1-3000000"))
+cnts[,1:2]
+```
+
 
 
 # Appendix
