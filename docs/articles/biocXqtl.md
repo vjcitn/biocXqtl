@@ -129,7 +129,7 @@ system.time(zzz <- bind_Zs(mxx[ok,]))
     ## some variants have MAF > 0.5
 
     ##     user   system  elapsed 
-    ## 1364.280   26.647  184.635
+    ## 1308.936   25.080  176.676
 
 Here’s a helper function to visualize one association.
 
@@ -215,7 +215,7 @@ system.time(zzz <- bind_Zs(mxx))
     ## some variants have MAF > 0.5
 
     ##    user  system elapsed 
-    ## 276.801   1.613  35.633
+    ## 262.441   1.429  33.604
 
 <div id="cb19" class="sourceCode">
 
@@ -253,7 +253,7 @@ system.time(zzz <- bind_Zs(mxx))
     ## some variants have MAF > 0.5
 
     ##     user   system  elapsed 
-    ## 1421.558    3.766  180.295
+    ## 1274.099    2.608  160.434
 
 <div id="cb23" class="sourceCode">
 

@@ -198,10 +198,10 @@ dir(tdir)
 
     ##  [1] "BiocStyle"                      "chr19_limsamples_maf10.bed"    
     ##  [3] "chr19_limsamples_maf10.bim"     "chr19_limsamples_maf10.fam"    
-    ##  [5] "chr19_limsamples_maf10.log"     "filea8a43da011e3"              
-    ##  [7] "filea8a441199817"               "filea8a44cdc458d"              
-    ##  [9] "filea8a458218b25"               "filea8a4739b6aed"              
-    ## [11] "make_bed.sh"                    "rmarkdown-stra8a44fa9d0a4.html"
+    ##  [5] "chr19_limsamples_maf10.log"     "fileb7da1f08b483"              
+    ##  [7] "fileb7da2a1219e4"               "fileb7da3b456512"              
+    ##  [9] "fileb7da49aea4bb"               "fileb7da5cbe988b"              
+    ## [11] "make_bed.sh"                    "rmarkdown-strb7da63784ba6.html"
 
 </div>
 
@@ -297,8 +297,6 @@ head(res$iid)
 </div>
 
     ## [1] "HG00096" "HG00097" "HG00099" "HG00100" "HG00101" "HG00171"
-
-genio
 
 </div>
 
