@@ -1,0 +1,83 @@
+---
+title: "Handling variants in biocXqtl"
+shorttitle: "outlier dytection methods"
+author: "Vincent J. Carey, stvjc at channing.harvard.edu"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Handling variants in biocXqtl}
+  %\VignetteEncoding{UTF-8}
+output:
+  BiocStyle::html_document:
+    highlight: pygments
+    number_sections: yes
+    theme: united
+    toc: yes
+---
+
+# Introduction
+
+Diverse strategies have been proposed for managing archives of DNA variants in humans.
+
+- [VCF](https://en.wikipedia.org/wiki/Variant_Call_Format) is widely used and many toolsets are available
+for working with this format.  
+- [Plink](https://www.cog-genomics.org/plink/2.0/) has a format in wide use.
+- Hail's MatrixTable and
+associated tooling offer
+["easy ways to slice, dice, query, and summarize"](https://hail.is/docs/0.2/tutorials/01-genome-wide-association-study.html) DNA variants.
+
+
+We'll focus on VCF and Plink in this document.
+
+# VCF access and manipulations
+
+We will work with bgzipped, tabix-indexed resources.
+
+A demonstration VCF archive is available with biocXqtl.
+The associated vcf.gz file was formed by filtering publicly
+available variants from the 1000 genomes project.
+See the Appendix for information on how the demonstration
+VCF was produced.
+
+```{r lksn1, message=FALSE}
+library(biocXqtl)
+library(VariantAnnotation)
+vpath = demo_vcf()
+h = scanVcfHeader(vpath)
+h
+```
+
+The header report indicates that genotypes are available for 731 individuals.
+
+
+# Appendix
+
+Code to produce the demonstration VCF is
+
+```
+library(biocXqtl)
+library(VariantAnnotation)
+data(mageSE_19) # produced from MAGE "DESeq2" quantifications
+cc = colnames(mageSE_19)
+data(tiles38)
+library(GenomeInfoDb)
+seqlevelsStyle(tiles38) = "Ensembl"
+t19 = tiles38[which(seqnames(tiles38)=="19")]
+bigvcf = filterVcfByGenotypeCounts("~/MAGE/ALL.chr19.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz", samples=cc, min_per_genotype=10, regions=range(t19))
+```
+
+The vcf.gz file was obtained following instructions at `https://registry.opendata.aws/1000-genomes/`.
+
+The code given above runs on a 32 GB macbook in a few minutes, with the following report:
+
+```
+Total samples in VCF: 2504
+Analyzing 731 samples
+Reading VCF...
+[W::hts_idx_load3] The index file is older than the data file: 
+ .../MAGE/ALL.chr19.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz.tbi
+Read 1816698 variants
+Counting genotypes...
+Variants passing filter: 156943 / 1816698
+  Mean counts - HomRef: 690.8, Het: 25.4, HomAlt: 14.4
+```
