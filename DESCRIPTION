@@ -13,8 +13,8 @@ Description: This is a modular system for creating molecular QTL statistics.  Gi
 	results of association tests will be bound into the rowData of 
 	the input RangedSummarizedExperiment.
 Depends: R (>= 4.3.0), utils, SummarizedExperiment
-Suggests: knitr, BiocStyle, testthat, rmarkdown, beeswarm, MASS
-Imports: methods, RcppEigen, tidyr, ggplot2, plotly, Rcpp, BiocParallel, BiocGenerics,
+Suggests: knitr, BiocStyle, testthat, rmarkdown, beeswarm, MASS, genio, reticulate
+Imports: methods, tidyr, ggplot2, plotly, Rcpp, BiocParallel, BiocGenerics,
 	MatrixGenerics, S4Vectors, VariantAnnotation, GenomicRanges, Seqinfo, Rsamtools
 License: MIT + file LICENSE
 VignetteBuilder: knitr
