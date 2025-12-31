@@ -130,12 +130,6 @@ head(res$sid)
 head(res$iid)
 ```
 
-
-
-genio 
-
-
-
 # Appendix
 
 ## VCF production
