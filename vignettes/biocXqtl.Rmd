@@ -1,6 +1,5 @@
 ---
 title: "biocXqtl: flexible molecular QTL assessment"
-shorttitle: "outlier dytection methods"
 author: "Vincent J. Carey, stvjc at channing.harvard.edu"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 vignette: >

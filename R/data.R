@@ -38,3 +38,11 @@
 #' @usage data(tiles38)
 #' @format GRanges
 "tiles38"
+
+#' SummarizedExperiment with example data from tensorQTL, with 445 individuals
+#' from the GEUVADIS project
+#' @note Associated genotype data is available in PlinkArray with `example_PlinkArray()`.
+#' @docType data
+#' @usage data(tens445)
+#' @format SummarizedExperiment
+"tens445"
