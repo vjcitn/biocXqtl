@@ -9,7 +9,7 @@
 #' mp = minorAlleleCounts(vp)
 #' mp[,1:5]
 #' mp = mp[, colnames(mageSE_19)]
-#' new("XqtlExperiment", mageSE_19, calls=mp)
+#' new("XqtlExperiment", mageSE_19, calls=mp, NAMES=NULL)
 #' @export
 setClass("XqtlExperiment", contains="RangedSummarizedExperiment",
   slots=c("calls"="GRanges"))
@@ -38,7 +38,7 @@ XqtlExperiment = function(se, calls) {
  okids = intersect(colnames(mcols(calls)), colnames(se))
  se = se[,okids]
  calls = calls[, okids]
- new("XqtlExperiment", se, calls=calls)
+ new("XqtlExperiment", se, calls=calls, NAMES=NULL)
 }
 
 #' getter for genotype calls

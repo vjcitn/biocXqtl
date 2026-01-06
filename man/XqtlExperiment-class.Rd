@@ -17,5 +17,5 @@ vp = system.file("vcf", "chr19_50k.vcf.gz", package="biocXqtl")
 mp = minorAlleleCounts(vp)
 mp[,1:5]
 mp = mp[, colnames(mageSE_19)]
-new("XqtlExperiment", mageSE_19, calls=mp)
+new("XqtlExperiment", mageSE_19, calls=mp, NAMES=NULL)
 }
