@@ -49,7 +49,10 @@ library(biocXqtl)
 
     ## Warning: package 'GenomicRanges' was built under R version 4.5.2
 
-<div id="cb3" class="sourceCode">
+    ## Warning: replacing previous import 'BiocGenerics::type' by 'arrow::type' when
+    ## loading 'biocXqtl'
+
+<div id="cb4" class="sourceCode">
 
 ``` r
 data(mageSE_19)
@@ -59,7 +62,7 @@ data(mageSE_19)
 
 Genotype data:
 
-<div id="cb4" class="sourceCode">
+<div id="cb5" class="sourceCode">
 
 ``` r
 dv = demo_vcf()
@@ -71,7 +74,7 @@ head(samples(h))
 
     ## [1] "HG00096" "HG00100" "HG00105" "HG00108" "HG00110" "HG00113"
 
-<div id="cb6" class="sourceCode">
+<div id="cb7" class="sourceCode">
 
 ``` r
 length(intersect(samples(h), colnames(mageSE_19)))
@@ -92,7 +95,7 @@ variants.
 
 Bind the minor allele counts to the expression data:
 
-<div id="cb8" class="sourceCode">
+<div id="cb9" class="sourceCode">
 
 ``` r
 mins  = minorAlleleCounts(demo_vcf(), GRanges("19:1-50000000"))
@@ -115,7 +118,7 @@ procedures in the package will incorporate it.
 The following step uses C++ modules to compute association tests for all
 genotypes and all gene expression measures in mageSE\_19.
 
-<div id="cb9" class="sourceCode">
+<div id="cb10" class="sourceCode">
 
 ``` r
 sds = rowSds(assay(mxx), na.rm=TRUE)
@@ -128,12 +131,12 @@ system.time(zzz <- bind_Zs(mxx[ok,]))
 
     ## some variants have MAF > 0.5
 
-    ##     user   system  elapsed 
-    ## 1308.936   25.080  176.676
+    ##    user  system elapsed 
+    ##  98.469  38.866  36.456
 
 Here’s a helper function to visualize one association.
 
-<div id="cb12" class="sourceCode">
+<div id="cb13" class="sourceCode">
 
 ``` r
 onebox = function(xse, mfeat="ENSG00000174837", vnt="rs4897932", title) {
@@ -151,7 +154,7 @@ onebox(mxx[ok,], title="MAGE eQTL")
 
 We can also visualize interactively:
 
-<div id="cb13" class="sourceCode">
+<div id="cb14" class="sourceCode">
 
 ``` r
 viz_stats(zzz, midchop=5)
@@ -173,7 +176,7 @@ style="width:700px;height:432.632880098888px;">
 
 First we reanalyze with adjustment for continental group.
 
-<div id="cb14" class="sourceCode">
+<div id="cb15" class="sourceCode">
 
 ``` r
 data(mageSE_19)
@@ -201,7 +204,7 @@ print(mxx)
     ##   9594 genotype calls present.
     ##   use getCalls() to see them with addresses.
 
-<div id="cb16" class="sourceCode">
+<div id="cb17" class="sourceCode">
 
 ``` r
 colData(mxx)=NULL
@@ -215,9 +218,9 @@ system.time(zzz <- bind_Zs(mxx))
     ## some variants have MAF > 0.5
 
     ##    user  system elapsed 
-    ## 262.441   1.429  33.604
+    ##   7.995   1.025   1.578
 
-<div id="cb19" class="sourceCode">
+<div id="cb20" class="sourceCode">
 
 ``` r
 viz_stats(zzz, midchop=5)
@@ -233,7 +236,7 @@ style="width:700px;height:432.632880098888px;">
 
 Then we add sex as well.
 
-<div id="cb20" class="sourceCode">
+<div id="cb21" class="sourceCode">
 
 ``` r
 data(mageSE_19)
@@ -252,10 +255,10 @@ system.time(zzz <- bind_Zs(mxx))
 
     ## some variants have MAF > 0.5
 
-    ##     user   system  elapsed 
-    ## 1274.099    2.608  160.434
+    ##    user  system elapsed 
+    ##  25.229   1.374   3.859
 
-<div id="cb23" class="sourceCode">
+<div id="cb24" class="sourceCode">
 
 ``` r
 viz_stats(zzz, midchop=7)

@@ -21,6 +21,8 @@
 -   `countGenotypesVectorized()` : More efficient vectorized version for
     large datasets
 -   `demo_vcf()` : provide path to a demonstration VCF file
+-   `example_tensorQTL()` : produce arrow dataset with tensorQTL cis
+    example output
 -   `fastLmMany_R()` : Fit multiple linear models with common design
     matrix
 -   `filterCalls()` : filter the call component of an XqtlExperiment
@@ -29,6 +31,8 @@
 -   `filterVcfMultipleCriteria()` : Filter VCF with multiple criteria
 -   `getCalls()` : getter for genotype calls
 -   `getGenotypeSummary()` : Get genotype summary statistics
+-   `get_tensor_example_path()` : operate with BiocFileCache to retrieve
+    zip file of tensorQTL output
 -   `geuv19` : a RangedSummarizedExperiment with data from
     GeuvadisTranscriptExpr
 -   `geuv19_samples` : data frame with sample information for geuv19
@@ -39,6 +43,8 @@
 -   `minorAlleleCounts()` : produce data.frame with minor allele counts
     in a region, from VCF
 -   `show(<XqtlExperiment>)` : present concise view of XqtlExperiment
+-   `tens445` : SummarizedExperiment with example data from tensorQTL,
+    with 445 individuals from the GEUVADIS project
 -   `tiles38` : a GRanges tiling GRCh38
 -   `viz_stats()` : produce a plotly display of statistics of xQTL
     association

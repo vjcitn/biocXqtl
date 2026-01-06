@@ -12,6 +12,8 @@
 
 -   [biocXqtl: flexible molecular QTL
     assessment](https://github.com/vjcitn/biocXqtl/articles/biocXqtl.md):
+-   [eQTL searching with
+    biocXqtl](https://github.com/vjcitn/biocXqtl/articles/qtlsearches.md):
 -   [Handling variants in
     biocXqtl](https://github.com/vjcitn/biocXqtl/articles/snps.md):
 

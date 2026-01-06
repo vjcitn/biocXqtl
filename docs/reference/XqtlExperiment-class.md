@@ -58,7 +58,7 @@ mp[,1:5]
 #>   -------
 #>   seqinfo: 1 sequence from GRCh38 genome; no seqlengths
 mp = mp[, colnames(mageSE_19)]
-new("XqtlExperiment", mageSE_19, calls=mp)
+new("XqtlExperiment", mageSE_19, calls=mp, NAMES=NULL)
 #> class: XqtlExperiment 
 #> dim: 1377 731 
 #> metadata(0):

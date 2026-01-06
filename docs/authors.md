@@ -18,15 +18,15 @@
 Source:
 [`DESCRIPTION`](https://github.com/vjcitn/biocXqtl/blob/HEAD/DESCRIPTION)
 
-Carey V (2025). *biocXqtl: modular system for creating molecular QTL
-statistics*. R package version 0.0.9,
+Carey V (2026). *biocXqtl: modular system for creating molecular QTL
+statistics*. R package version 0.0.13,
 <https://github.com/vjcitn/biocXqtl>.
 
     @Manual{,
       title = {biocXqtl: modular system for creating molecular QTL statistics},
       author = {Vince Carey},
-      year = {2025},
-      note = {R package version 0.0.9},
+      year = {2026},
+      note = {R package version 0.0.13},
       url = {https://github.com/vjcitn/biocXqtl},
     }
 

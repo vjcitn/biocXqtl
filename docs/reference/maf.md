@@ -40,31 +40,9 @@ maf(xse)
 
 ``` r
 example(XqtlExperiment)  # makes nn
-#> 
-#> XqtlEx> data(mageSE_19)
-#> 
-#> XqtlEx> vp = system.file("vcf", "chr19_50k.vcf.gz", package="biocXqtl")
-#> 
-#> XqtlEx> mp = minorAlleleCounts(vp)
-#> 
-#> XqtlEx> nn = XqtlExperiment(mageSE_19, mp)
-#> 
-#> XqtlEx> nn
-#> class: XqtlExperiment 
-#> dim: 1377 731 
-#> metadata(0):
-#> assays(1): logcounts
-#> rownames(1377): ENSG00000176695 ENSG00000141934 ... ENSG00000213753
-#>   ENSG00000099326
-#> rowData names(6): gene_id gene_name ... symbol entrezid
-#> colnames(731): HG00096 HG00100 ... NA21129 NA21130
-#> colData names(13): SRA_accession internal_libraryID ...
-#>   RNAQubitTotalAmount_ng RIN
-#>   272 genotype calls present.
-#>   use getCalls() to see them with addresses.
+#> Warning: no help found for 'XqtlExperiment'
 summary(maf(nn))
-#>     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-#> 0.000000 0.000000 0.000000 0.017784 0.000684 0.999316 
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'object' in selecting a method for function 'summary': error in evaluating the argument 'x' in selecting a method for function 'mcols': object 'nn' not found
 ```
 
 </div>

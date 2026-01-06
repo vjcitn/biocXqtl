@@ -48,7 +48,10 @@ library(biocXqtl)
 
     ## Warning: package 'GenomicRanges' was built under R version 4.5.2
 
-<div id="cb3" class="sourceCode">
+    ## Warning: replacing previous import 'BiocGenerics::type' by 'arrow::type' when
+    ## loading 'biocXqtl'
+
+<div id="cb4" class="sourceCode">
 
 ``` r
 library(VariantAnnotation)
@@ -59,7 +62,7 @@ vpath = demo_vcf()
 
 First we examine the header.
 
-<div id="cb4" class="sourceCode">
+<div id="cb5" class="sourceCode">
 
 ``` r
 h = scanVcfHeader(vpath)
@@ -82,7 +85,7 @@ Direct ingestion of VCF can consume considerable RAM. We can select
 regions of interest and scan with inline filtering. See the
 documentation on `ScanVcfParam` in VariantAnnotation.
 
-<div id="cb6" class="sourceCode">
+<div id="cb7" class="sourceCode">
 
 ``` r
 library(GenomicRanges)
@@ -96,7 +99,7 @@ sc1 = scanVcf(vpath, param=ss)
 Each range in the `ScanVcfParam` will produce a list element in the
 result of `scanVcf`.
 
-<div id="cb7" class="sourceCode">
+<div id="cb8" class="sourceCode">
 
 ``` r
 names(sc1[[1]])
@@ -107,7 +110,7 @@ names(sc1[[1]])
     ## [1] "rowRanges" "REF"       "ALT"       "QUAL"      "FILTER"    "INFO"     
     ## [7] "GENO"
 
-<div id="cb9" class="sourceCode">
+<div id="cb10" class="sourceCode">
 
 ``` r
 dim(sc1[[1]]$GENO[[1]])
@@ -117,7 +120,7 @@ dim(sc1[[1]]$GENO[[1]])
 
     ## [1] 9594  731
 
-<div id="cb11" class="sourceCode">
+<div id="cb12" class="sourceCode">
 
 ``` r
 sc1[[1]]$rowRanges
@@ -147,7 +150,7 @@ retrieves minor allele counts from a tabix-indexed VCF. This returns a
 GRanges with counts in the mcols. The addresses are bound with the
 counts.
 
-<div id="cb13" class="sourceCode">
+<div id="cb14" class="sourceCode">
 
 ``` r
 cnts = minorAlleleCounts(vpath, region=GRanges("19:1-3000000"))
@@ -185,7 +188,7 @@ cnts[,1:2]
 
 The data were extracted from the GWAS tutorial.
 
-<div id="cb15" class="sourceCode">
+<div id="cb16" class="sourceCode">
 
 ``` r
 zfi = system.file("plink", "chr19_1kglim.zip", package="biocXqtl")
@@ -198,10 +201,10 @@ dir(tdir)
 
     ##  [1] "BiocStyle"                      "chr19_limsamples_maf10.bed"    
     ##  [3] "chr19_limsamples_maf10.bim"     "chr19_limsamples_maf10.fam"    
-    ##  [5] "chr19_limsamples_maf10.log"     "fileb7da1f08b483"              
-    ##  [7] "fileb7da2a1219e4"               "fileb7da3b456512"              
-    ##  [9] "fileb7da49aea4bb"               "fileb7da5cbe988b"              
-    ## [11] "make_bed.sh"                    "rmarkdown-strb7da63784ba6.html"
+    ##  [5] "chr19_limsamples_maf10.log"     "file91142cab4512"              
+    ##  [7] "file9114377a83a4"               "file91143dce457d"              
+    ##  [9] "file9114462d36e0"               "file91144e8d4038"              
+    ## [11] "make_bed.sh"                    "rmarkdown-str91142db56957.html"
 
 </div>
 
@@ -211,7 +214,7 @@ dir(tdir)
 
 This package seems to be capable only of ‘full reads’.
 
-<div id="cb17" class="sourceCode">
+<div id="cb18" class="sourceCode">
 
 ``` r
 library(genio)
@@ -232,7 +235,7 @@ dim(dem$X)
 
 Here we can make targeted reads from the resource.
 
-<div id="cb19" class="sourceCode">
+<div id="cb20" class="sourceCode">
 
 ``` r
 library(reticulate)
@@ -242,7 +245,7 @@ library(reticulate)
 
     ## Warning: package 'reticulate' was built under R version 4.5.2
 
-<div id="cb21" class="sourceCode">
+<div id="cb22" class="sourceCode">
 
 ``` r
 py_require("bed-reader")
@@ -257,7 +260,7 @@ dim(limread)
 
     ## [1] 5 6
 
-<div id="cb23" class="sourceCode">
+<div id="cb24" class="sourceCode">
 
 ``` r
 head(res$bp_position)
@@ -267,7 +270,7 @@ head(res$bp_position)
 
     ## [1] 80840 81039 81806 90854 93234 95981
 
-<div id="cb25" class="sourceCode">
+<div id="cb26" class="sourceCode">
 
 ``` r
 head(res$chromosome)
@@ -277,7 +280,7 @@ head(res$chromosome)
 
     ## [1] "19" "19" "19" "19" "19" "19"
 
-<div id="cb27" class="sourceCode">
+<div id="cb28" class="sourceCode">
 
 ``` r
 head(res$sid)
@@ -288,7 +291,7 @@ head(res$sid)
     ## [1] "rs201816663" "rs879919317" "rs2432259"   "rs200254023" "rs151275984"
     ## [6] "rs8110113"
 
-<div id="cb29" class="sourceCode">
+<div id="cb30" class="sourceCode">
 
 ``` r
 head(res$iid)
