@@ -1,0 +1,45 @@
+---
+title: "eQTL searching with biocXqtl"
+author: "Vincent J. Carey, stvjc at channing.harvard.edu"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{eQTL searching with biocXqtl}
+  %\VignetteEncoding{UTF-8}
+output:
+  BiocStyle::html_document:
+    highlight: pygments
+    number_sections: yes
+    theme: united
+    toc: yes
+---
+
+# Introduction
+
+[eQTLs](https://en.wikipedia.org/wiki/Expression_quantitative_trait_loci)
+are genetic loci exhibiting association with gene expression.
+
+Consortia have produced catalogs of eQTLs based on various
+cohorts and experimental procedures.
+
+- [EBI eQTL catalog](https://www.ebi.ac.uk/eqtl/)
+- [eQTLGen](https://www.eqtlgen.org/); a related project with single-cell experiments
+is [sc-eqtlGen](https://www.eqtlgen.org/sc/)
+
+biocXqtl facilitates flexible analyses for genetics of variation in molecular
+phenotypes.  In this vignette we review analytic results for 455 GEUVADIS
+samples.
+
+# tensorQTL example
+
+```{r  lkarch,message=FALSE}
+library(biocXqtl)
+library(arrow)
+library(dplyr)
+library(DT)
+tens = example_tensorQTL()
+tens |> arrange(pval_nominal) |> head(10) |> 
+    as.data.frame() |> datatable()
+```
+
+

@@ -13,5 +13,5 @@ get_tensor_example_path(ca = BiocFileCache::BiocFileCache())
 operate with BiocFileCache to retrieve zip file of tensorQTL output
 }
 \examples{
-get_tensor_example()
+get_tensor_example_path()
 }

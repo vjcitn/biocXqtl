@@ -2,7 +2,7 @@
 #' @import BiocFileCache
 #' @param ca BiocFileCache instance
 #' @examples
-#' get_tensor_example()
+#' get_tensor_example_path()
 #' @export
 get_tensor_example_path = function(ca = BiocFileCache::BiocFileCache()) {
   url = "https://mghp.osn.xsede.org/bir190004-bucket01/BiocXQTLsupport/GEUVADIS.445_samples.cis_qtl_pairs.chr18.parquet"
