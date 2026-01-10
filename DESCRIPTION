@@ -1,6 +1,6 @@
 Package: biocXqtl
 Title: modular system for creating molecular QTL statistics
-Version: 0.0.13
+Version: 0.0.14
 Authors@R:
     person(given = "Vince",
            family = "Carey",
@@ -16,7 +16,7 @@ Depends: R (>= 4.3.0), utils, SummarizedExperiment
 Suggests: knitr, BiocStyle, testthat, rmarkdown, beeswarm, MASS, genio, reticulate, DT, dplyr
 Imports: methods, tidyr, ggplot2, plotly, Rcpp, BiocParallel, BiocGenerics,
 	MatrixGenerics, S4Vectors, VariantAnnotation, GenomicRanges, Seqinfo, Rsamtools,
-	arrow, BiocFileCache
+	BiocFileCache
 License: MIT + file LICENSE
 VignetteBuilder: knitr
 biocViews: Infrastructure
