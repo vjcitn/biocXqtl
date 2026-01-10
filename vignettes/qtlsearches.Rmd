@@ -33,6 +33,7 @@ samples.
 # tensorQTL example
 
 ```{r  lkarch,message=FALSE}
+stopifnot(requireNamespace("arrow"))
 library(biocXqtl)
 library(arrow)
 library(dplyr)

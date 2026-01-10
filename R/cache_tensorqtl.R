@@ -16,12 +16,14 @@ get_tensor_example_path = function(ca = BiocFileCache::BiocFileCache()) {
 }
 
 #' produce arrow dataset with tensorQTL cis example output
-#' @import arrow
 #' @examples
+#' if (requireNamespace("arrow")) {
 #' example_tensorQTL()
+#' }
 #' @export
 example_tensorQTL = function() {
   pa = get_tensor_example_path()
+  if (!requireNamespace("arrow")) stop("install arrow to use this package, we can't import it")
   arrow::open_dataset(pa)
 }
 

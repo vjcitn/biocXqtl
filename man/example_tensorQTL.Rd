@@ -10,5 +10,7 @@ example_tensorQTL()
 produce arrow dataset with tensorQTL cis example output
 }
 \examples{
+if (requireNamespace("arrow")) {
 example_tensorQTL()
+}
 }
