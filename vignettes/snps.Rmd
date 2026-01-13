@@ -105,7 +105,7 @@ dir(tdir)
 
 This package seems to be capable only of 'full reads'.
 
-```{r lkgenio, message=FALSE}
+```{r lkgenio, message=FALSE, eval=FALSE}
 library(genio)
 fi = grep("bed$", dir(tdir, full=TRUE), value=TRUE)
 dem = read_plink(fi)
@@ -120,6 +120,7 @@ Here we can make targeted reads from the resource.
 library(reticulate)
 py_require("bed-reader")
 br = import("bed_reader")
+fi = grep("bed$", dir(tdir, full=TRUE), value=TRUE)
 res = br$open_bed(fi)
 toget = tuple(0:4, 0:5)
 limread = res$read(toget)

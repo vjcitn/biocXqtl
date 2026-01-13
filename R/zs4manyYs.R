@@ -22,7 +22,7 @@
 #' lk$Sex = namedSex[colnames(lk)]
 #' table(lk$Sex)
 #' chk2 <- zs4manyYs(lk) # use covariate
-#' plot(as.numeric(chk2), as.numeric(chk1))
+#' if (interactive()) plot(as.numeric(chk2), as.numeric(chk1))
 #' @export
 zs4manyYs = function (se, omit.hi.maf=FALSE, BPPARAM=BiocParallel::bpparam())
 {

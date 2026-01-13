@@ -50,6 +50,7 @@ The expression data:
 ```{r theex, message=FALSE}
 library(biocXqtl)
 data(mageSE_19)
+mageSE_19
 ```
 
 Genotype data:
@@ -67,7 +68,7 @@ has other types of variants.
 
 Bind the minor allele counts to the expression data:
 ```{r dobind}
-mins  = minorAlleleCounts(demo_vcf(), GRanges("19:1-50000000"))
+mins  = minorAlleleCounts(demo_vcf(), GRanges("19:1-500000"))
 mxx = XqtlExperiment(mageSE_19, mins)
 colData(mxx) = NULL
 ```
@@ -80,6 +81,9 @@ in the package will incorporate it.
 The following step uses C++ modules to compute association tests for
 all genotypes and all gene expression measures in mageSE_19.
 ```{r dotests}
+library(BiocParallel)
+chkm = try(register(MulticoreParam(4)))
+if (inherits(chkm, "try-error")) register(SerialParam())
 sds = rowSds(assay(mxx), na.rm=TRUE)
 qq = quantile(sds, .95)
 ok = which(sds > qq)
@@ -107,7 +111,6 @@ viz_stats(zzz, midchop=5)
 First we reanalyze with adjustment for continental group.
 
 ```{r redo}
-data(mageSE_19)
 sds = rowSds(assay(mageSE_19), na.rm=TRUE)
 qq = quantile(sds, .9)
 ok = which(sds > qq)
@@ -125,13 +128,6 @@ viz_stats(zzz, midchop=5)
 Then we add sex as well.
 
 ```{r redo2}
-data(mageSE_19)
-sds = rowSds(assay(mageSE_19), na.rm=TRUE)
-qq = quantile(sds, .9)
-ok = which(sds > qq)
-cd = colData(mageSE_19)
-mins  = minorAlleleCounts(demo_vcf(), GRanges("19:1-3000000"))
-mxx = XqtlExperiment(mageSE_19[ok,], mins)
 mxx$continent = cd$continentalGroup
 mxx$sex = cd$sex
 system.time(zzz <- bind_Zs(mxx))

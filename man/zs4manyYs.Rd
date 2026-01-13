@@ -36,5 +36,5 @@ names(namedSex) = geuv19_samples[["Sample name"]]
 lk$Sex = namedSex[colnames(lk)]
 table(lk$Sex)
 chk2 <- zs4manyYs(lk) # use covariate
-plot(as.numeric(chk2), as.numeric(chk1))
+if (interactive()) plot(as.numeric(chk2), as.numeric(chk1))
 }
