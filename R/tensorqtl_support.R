@@ -71,3 +71,60 @@ tq_xexp_cis = function(xexp, window=1000000L, maf_threshold=0, prefix = "tqrun",
     write_stats=TRUE, write_top=TRUE, output_dir=write_parquet_path)
 }
 
+
+#   map_trans(genotype_df, phenotype_df, covariates_df=None, interaction_s=None, 
+#      return_sparse=True, pval_threshold=1e-05, maf_threshold=0.05, 
+#      alleles=2, return_r2=False, batch_size=20000, logp=False, 
+#      logger=None, verbose=True)
+#        Run trans-QTL mapping
+
+#' tq_xexp_trans runs tensorqtl map_trans on components from an XqtlExperiment instance
+#' @importFrom reticulate import py_require
+#' @param xexp XqtlExperiment instance
+#' @param pval_threshold numeric(1) defaults to 1e-05,
+#' @param maf_threshold numeric(1) defaults to 0.05
+#' @param batch_size numeric(1) defaults to 20000
+#' @examples
+#' example(XqtlExperiment) # makes nn
+#' td = tempdir()
+#' sexn = ifelse(colData(nn)$sex == "XY", 0., 1.)
+#' colData(nn) = NULL
+#' nn$sex = sexn
+#' lk = tq_xexp_trans(nn, maf_threshold=.01, pval_threshold=1e-4)
+#' head(lk)
+#' @export
+tq_xexp_trans = function(xexp, pval_threshold=1e-5, maf_threshold=0.05, batch_size=20000L ) {
+ stopifnot(inherits(xexp, "XqtlExperiment"))
+ lkcd = colData(xexp)
+ dcd = sapply(lkcd, class)
+ if (any(dcd == "character")) stop("can't use character variables in colData(xexp)")
+ reticulate::py_require("tensorqtl")
+ reticulate::py_require("rpy2")
+ reticulate::py_require("pandas")
+ reticulate::py_require("pandas_plink")
+ reticulate::import("pandas_plink") # needed?
+ reticulate::py_require("torch")
+ reticulate::py_require("pyarrow")
+ reticulate::py_require("fastparquet")
+ fp = reticulate::import("fastparquet")  # needed?
+ reticulate::py_require("pyarrow")
+ pd = reticulate::import("pandas")
+ tor = reticulate::import("torch")
+ tq = reticulate::import("tensorqtl")
+ dev = tor$device("cuda")
+ trans = reticulate::import("tensorqtl.trans")
+
+ if (isTRUE(options()$verbose))  print(reticulate::py_config())
+
+ conv = xexp2dfs(xexp)
+
+#   map_trans(genotype_df, phenotype_df, covariates_df=None, interaction_s=None, 
+#      return_sparse=True, pval_threshold=1e-05, maf_threshold=0.05, 
+#      alleles=2, return_r2=False, batch_size=20000, logp=False, 
+#      logger=None, verbose=True)
+#        Run trans-QTL mapping
+
+ trans$map_trans(conv$genotype_df, conv$phenotype_df, 
+    pval_threshold=pval_threshold, maf_threshold=maf_threshold,
+    batch_size=batch_size)
+}
