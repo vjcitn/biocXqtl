@@ -1,7 +1,7 @@
 
 
 #' Filter VCF to variants with minimum counts in each genotype group
-#' @import VariantAnnotation
+#' @rawNamespace import(VariantAnnotation, except=c(select, import))
 #' @importFrom Rsamtools TabixFile
 #'
 #' @param vcf_file Path to tabix-indexed VCF file (.vcf.gz with .tbi index)

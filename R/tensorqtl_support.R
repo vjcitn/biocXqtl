@@ -127,5 +127,6 @@ tq_xexp_trans = function(xexp, pval_threshold=1e-5, maf_threshold=0.05, batch_si
  transtab = trans$map_trans(conv$genotype_df, conv$phenotype_df, 
     pval_threshold=pval_threshold, maf_threshold=maf_threshold,
     batch_size=batch_size)
+ transtab = add_loc_trans(xexp=xexp, trout=transtab)
  transtab
 }

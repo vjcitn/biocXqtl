@@ -1,6 +1,5 @@
 
 #' produce data.frame with minor allele counts in a region, from VCF
-#' @import VariantAnnotation
 #' @import GenomicRanges
 #' @import Seqinfo
 #' @param vcfpath character path to VCF
