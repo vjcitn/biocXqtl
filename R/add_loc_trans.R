@@ -8,7 +8,7 @@
 add_loc_trans = function(xexp, trout) {
   varlocdf = as.data.frame(granges(getCalls(xexp)))  # is getCalls costly?
   varlocdf$variant_id = rownames(varlocdf)
-  phlocdf = as.data.frame(rowRanges(nn))
+  phlocdf = as.data.frame(rowRanges(xexp))
   lj = left_join(trout, mutate(varlocdf, var_chr=seqnames, var_start=start, var_end=end,
            var_width=width, var_strand=strand, .keep="unused"),
           by="variant_id")

@@ -122,7 +122,7 @@ filterVcfByGenotypeCounts <- function(
 #' @return DataFrame with counts for each genotype category
 #' @export
 countGenotypes <- function(gt) {
-    
+    stopifnot(inherits(gt[1,1], "character"))   
     # Initialize counts
     n_variants <- nrow(gt)
     n_hom_ref <- integer(n_variants)
@@ -165,6 +165,10 @@ countGenotypes <- function(gt) {
 countGenotypesVectorized <- function(gt) {
     
    stopifnot(inherits(gt, "matrix"))
+   cands = c("0/0", "0|0", "0/1", "1/0", "0|1", "1|0", "1/1", "1|1")
+   tst = gt[,1]
+   stopifnot(all(na.omit(tst) %in% cands))  # verify elements are likely VCF GENO
+
    if (!inherits(gt[1,1], "character")) gt[] = as.character(gt)
 #    # Convert to character matrix if needed
 #    if (is(gt, "matrix")) {
