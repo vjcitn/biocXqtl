@@ -101,15 +101,12 @@ unzip(zfi, exdir=tdir)
 dir(tdir)
 ```
 
-## Using genio
+## Using PlinkArray
 
-This package seems to be capable only of 'full reads'.
-
-```{r lkgenio, message=FALSE, eval=FALSE}
-library(genio)
-fi = grep("bed$", dir(tdir, full=TRUE), value=TRUE)
-dem = read_plink(fi)
-dim(dem$X)
+```{r lkpla,message=FALSE}
+library(PlinkArray)
+p19 = PlinkArray(file.path(tdir, "chr19_limsamples_maf10"))
+p19
 ```
 
 ## Using python `bed-reader`

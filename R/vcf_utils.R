@@ -158,6 +158,7 @@ countGenotypes <- function(gt) {
 }
 
 #' More efficient vectorized version for large datasets
+#' @importFrom stats na.omit
 #' @param gt matrix of genotype calls (variants x samples) with form "0|0" or "0/0"
 #' as produced by VariantAnnotion::geno applied to a VCF object
 #' @return DataFrame with counts for each genotype category
