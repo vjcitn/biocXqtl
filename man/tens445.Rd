@@ -17,5 +17,6 @@ from the GEUVADIS project
 }
 \note{
 Associated genotype data is available in PlinkArray with `example_PlinkArray()`.
+The phenotype (gene) addresses are as supplied in the tensorqtl example bed file.
 }
 \keyword{datasets}
