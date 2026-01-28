@@ -7,12 +7,12 @@
 #' bano
 #' @export
 get_banovich_SE = function(ca = BiocFileCache::BiocFileCache()) {
-  url = "https://mghp.osn.xsede.org/bir190004-bucket01/BiocXQTLsupport/banoMethSE.rda"
-  inf = bfcquery(ca, "banoMethSE.rda")
+  url = "https://mghp.osn.xsede.org/bir190004-bucket01/BiocXQTLsupport/banoMethSE2.rda"
+  inf = bfcquery(ca, "banoMethSE2.rda")
   nr = nrow(inf)
   if (nr == 0) {
-    bfcadd(ca, fpath=url, rname="banoMethSE.rda", download=TRUE)
+    bfcadd(ca, fpath=url, rname="banoMethSE2.rda", download=TRUE)
   }
-  inf = bfcquery(ca, "banoMethSE.rda")$rpath
+  inf = bfcquery(ca, "banoMethSE2.rda")$rpath
   get(load(inf))
 }

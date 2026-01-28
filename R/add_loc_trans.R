@@ -4,6 +4,8 @@
 #' @param trout output of trans.map_trans
 #' @return data.frame instance with variant and phenotype feature annotation as
 #' new columns.  Note that there may be some excess conversion to character class.
+#' @note This started to fail on left_join because a pandas DataFrame will not autoconvert.
+#' Probably need pandas 2.3.3
 #' @export
 add_loc_trans = function(xexp, trout) {
   varlocdf = as.data.frame(granges(getCalls(xexp)))  # is getCalls costly?

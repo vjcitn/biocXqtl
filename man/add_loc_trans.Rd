@@ -18,3 +18,7 @@ new columns.  Note that there may be some excess conversion to character class.
 \description{
 utility to add annotation to trans results
 }
+\note{
+This started to fail on left_join because a pandas DataFrame will not autoconvert.
+Probably need pandas 2.3.3
+}

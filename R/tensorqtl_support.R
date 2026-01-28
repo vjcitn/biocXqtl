@@ -47,8 +47,8 @@ tq_xexp_cis = function(xexp, window=1000000L, maf_threshold=0, prefix = "tqrun",
  if (any(dcd == "character")) stop("can't use character variables in colData(xexp)")
  reticulate::py_require("tensorqtl")
  reticulate::py_require("rpy2")
- reticulate::py_require("pandas")
- reticulate::py_require("pandas_plink")
+ reticulate::py_require("pandas==2.3.3")  # discovered on linux
+ reticulate::py_require("pandas_plink==2.3.1")
  reticulate::import("pandas_plink") # needed?
  reticulate::py_require("torch")
  reticulate::py_require("pyarrow")
