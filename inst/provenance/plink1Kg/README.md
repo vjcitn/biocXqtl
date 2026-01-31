@@ -46,6 +46,68 @@ Writing all1kg.bed ... done.
 End time: Sun Jan 11 20:50:36 2026
 ```
 
+## Split by chromosome, sometimes (e.g., chr6) to arbitrary subchromosomes
+
+For chr17:
+```
+PLINK v2.0.0-a.6.32LM AVX2 Intel (10 Jan 2026)
+Options in effect:
+  --bfile all1kg
+  --chr 17
+  --make-bed
+  --out all1kg_chr17
+
+Hostname: vincelargegpu
+Working directory: /home/exouser/1KG
+Start time: Sun Jan 11 21:46:57 2026
+
+Random number seed: 1768168017
+60263 MiB RAM detected, ~56126 available; reserving 30131 MiB for main
+workspace.
+Using up to 16 threads (change this with --threads).
+3202 samples (1603 females, 1598 males, 1 ambiguous; 2583 founders) loaded from
+all1kg.fam.
+Note: 2585 nonstandard chromosome codes present.
+2073624 out of 74929081 variants loaded from all1kg.bim.
+Note: No phenotype data present.
+Writing all1kg_chr17.fam ... done.
+Writing all1kg_chr17.bim ... done.
+Writing all1kg_chr17.bed ... done.
+
+End time: Sun Jan 11 21:47:06 2026
+```
+
+For a subchromosome, we cut up the bim file.  For chr6 it had 3 pieces
+
+```
+PLINK v2.0.0-a.6.32LM AVX2 Intel (10 Jan 2026)
+Options in effect:
+  --bfile all1kg_chr6
+  --extract c6a.txt
+  --make-bed
+  --out all1kg_chr6a
+
+Hostname: vincelargegpu
+Working directory: /home/exouser/1KG
+Start time: Sun Jan 18 19:52:52 2026
+
+Random number seed: 1768765972
+60263 MiB RAM detected, ~57712 available; reserving 30131 MiB for main
+workspace.
+Using up to 16 threads (change this with --threads).
+3202 samples (1603 females, 1598 males, 1 ambiguous; 2583 founders) loaded from
+all1kg_chr6.fam.
+4315217 variants loaded from all1kg_chr6.bim.
+Note: No phenotype data present.
+--extract: 1500000 variants remaining.
+1500000 variants remaining after main filters.
+Writing all1kg_chr6a.fam ... done.
+Writing all1kg_chr6a.bim ... done.
+Writing all1kg_chr6a.bed ... done.
+
+End time: Sun Jan 18 19:52:55 2026
+```
+
 ## Make these usable in R
 
 Example DelayedArray ingestion of chr17:
