@@ -1,5 +1,21 @@
 # Provenance of PlinkArray/biocXqtl materials
 
+## Gotcha
+
+Before considering how nice all the following material is, note
+```
+> sum(duplicated(colnames(pl17)))
+[1] 104523
+```
+so there are duplicated rsids in the columns of the ingested bed.
+The associated bim has:
+```
+15 17 rs1410863556  0 113953   A      G
+16 17 rs1410863556  0 113953   C      G
+```
+This should be kept in mind when using the approach noted here.
+
+
 ## Acquiring and splitting 3202 1KG samples
 
 The link used to get the full hg38 genotyping for 3202 1KG samples is
