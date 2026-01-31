@@ -13,6 +13,19 @@ The associated bim has:
 15 17 rs1410863556  0 113953   A      G
 16 17 rs1410863556  0 113953   C      G
 ```
+
+We have
+```
+> bim17[bim17$V2=="rs1007347099",]
+       V1           V2 V3       V4                V5      V6
+365941 17 rs1007347099  0 12697335               GTA       G
+365942 17 rs1007347099  0 12697335             GTATA       G
+365943 17 rs1007347099  0 12697335 GTATATATATATATATA       G
+365944 17 rs1007347099  0 12697335                 G     GTA
+365945 17 rs1007347099  0 12697335                 G   GTATA
+365946 17 rs1007347099  0 12697335                 G GTATATA
+```
+
 This should be kept in mind when using the approach noted here.
 
 
