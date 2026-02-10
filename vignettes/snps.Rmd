@@ -101,19 +101,21 @@ unzip(zfi, exdir=tdir)
 dir(tdir)
 ```
 
-## Using PlinkArray
+## Using PlinkMatrix
 
 ```{r lkpla,message=FALSE}
-library(PlinkArray)
-p19 = PlinkArray(file.path(tdir, "chr19_limsamples_maf10"))
+library(PlinkMatrix)
+p19 = PlinkMatrix(file.path(tdir, "chr19_limsamples_maf10"))
 p19
 ```
 
 ## Using python `bed-reader`
 
-Here we can make targeted reads from the resource.
+We can make targeted reads from the resource when
+bed-reader is available.  At present we skip this to
+simplify matters using the package.
 
-```{r dopy, message=FALSE}
+```{r dopy, message=FALSE,eval=FALSE}
 library(reticulate)
 reticulate::py_require("bed-reader")
 br = reticulate::import("bed_reader")

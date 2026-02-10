@@ -41,7 +41,7 @@
 
 #' SummarizedExperiment with example data from tensorQTL, with 445 individuals
 #' from the GEUVADIS project
-#' @note Associated genotype data is available in PlinkArray with `example_PlinkArray()`.
+#' @note Associated genotype data is available in PlinkMatrix with `example_PlinkMatrix()`.
 #' The phenotype (gene) addresses are as supplied in the tensorqtl example bed file.
 #' @docType data
 #' @usage data(tens445)

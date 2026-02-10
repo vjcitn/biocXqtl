@@ -9,7 +9,8 @@ tq_xexp_cis(
   window = 1000000L,
   maf_threshold = 0,
   prefix = "tqrun",
-  write_parquet_path = tempdir()
+  write_parquet_path = tempdir(),
+  useINT = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ tq_xexp_cis(
 \item{prefix}{character(1) used as stem for output, defaults to 'tqrun'}
 
 \item{write_parquet_path}{path to folder used for output, defaults to `tempdir()`}
+
+\item{useINT}{logical, if TRUE, compute inverse normal transform for each feature}
 }
 \description{
 tq_xexp_cis runs tensorqtl cis.map_nominal on components from an XqtlExperiment instance

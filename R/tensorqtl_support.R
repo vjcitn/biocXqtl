@@ -1,8 +1,10 @@
 # utility for conversion of XqtlExperiment contents to tensorqtl inputs
 
-xexp2dfs = function(xexp) {
+xexp2dfs = function(xexp, useINT=FALSE) {
   stopifnot(inherits(xexp, "XqtlExperiment"))
-  phenotype_df = as.data.frame(as.matrix(assay(xexp)))
+  xmat = as.matrix(assay(xexp))
+  if (useINT) xmat = INT(xmat)
+  phenotype_df = as.data.frame(xmat)
   rownames(phenotype_df) = names(rowRanges(xexp))
   colnames(phenotype_df) = colnames(xexp)
   phenotype_pos_df = data.frame(chr=seqnames(rowRanges(xexp)), pos=start(rowRanges(xexp)))
@@ -30,6 +32,7 @@ xexp2dfs = function(xexp) {
 #' @param maf_threshold numeric(1) defaults to 0.
 #' @param prefix character(1) used as stem for output, defaults to 'tqrun'
 #' @param write_parquet_path path to folder used for output, defaults to `tempdir()`
+#' @param useINT logical, if TRUE, compute inverse normal transform for each feature
 #' @examples
 #' example(XqtlExperiment) # makes nn
 #' td = tempdir()
@@ -40,7 +43,7 @@ xexp2dfs = function(xexp) {
 #' dir(td, full=TRUE)
 #' @export
 tq_xexp_cis = function(xexp, window=1000000L, maf_threshold=0, prefix = "tqrun",
-    write_parquet_path = tempdir()) {
+    write_parquet_path = tempdir(), useINT=FALSE) {
  stopifnot(inherits(xexp, "XqtlExperiment"))
  lkcd = colData(xexp)
  dcd = sapply(lkcd, class)
@@ -63,7 +66,7 @@ tq_xexp_cis = function(xexp, window=1000000L, maf_threshold=0, prefix = "tqrun",
 
  if (isTRUE(options()$verbose))  print(reticulate::py_config())
 
- conv = xexp2dfs(xexp)
+ conv = xexp2dfs(xexp, useINT=useINT)
 
  cis$map_nominal(conv$genotype_df, conv$variant_df, conv$phenotype_df, 
     conv$phenotype_pos_df, prefix, covariates_df=conv$covariates_df,
@@ -84,16 +87,23 @@ tq_xexp_cis = function(xexp, window=1000000L, maf_threshold=0, prefix = "tqrun",
 #' @param pval_threshold numeric(1) defaults to 1e-05,
 #' @param maf_threshold numeric(1) defaults to 0.05
 #' @param batch_size numeric(1) defaults to 20000
+#' @param useINT logical, if TRUE, apply inverse normal transformation to all features
 #' @examples
 #' example(XqtlExperiment) # makes nn
 #' td = tempdir()
 #' sexn = ifelse(colData(nn)$sex == "XY", 0., 1.)
 #' colData(nn) = NULL
 #' nn$sex = sexn
+#' Sys.setenv(OMP_NUM_THREADS = 1)  # these seem important for avoiding crash in macos
+#' Sys.setenv(OPENBLAS_NUM_THREADS = 1)
+#' Sys.setenv(MKL_NUM_THREADS = 1)
 #' lk = tq_xexp_trans(nn, maf_threshold=.01, pval_threshold=1e-4)
 #' head(lk)
+#' lkint = tq_xexp_trans(nn, maf_threshold=.01, pval_threshold=1e-4, useINT=TRUE)
+#' head(lkint)
 #' @export
-tq_xexp_trans = function(xexp, pval_threshold=1e-5, maf_threshold=0.05, batch_size=20000L ) {
+tq_xexp_trans = function(xexp, pval_threshold=1e-5, maf_threshold=0.05, batch_size=20000L,
+   useINT=FALSE ) {
  stopifnot(inherits(xexp, "XqtlExperiment"))
  lkcd = colData(xexp)
  dcd = sapply(lkcd, class)
@@ -116,7 +126,7 @@ tq_xexp_trans = function(xexp, pval_threshold=1e-5, maf_threshold=0.05, batch_si
 
  if (isTRUE(options()$verbose))  print(reticulate::py_config())
 
- conv = xexp2dfs(xexp)
+ conv = xexp2dfs(xexp, useINT=useINT)
 
 #   map_trans(genotype_df, phenotype_df, covariates_df=None, interaction_s=None, 
 #      return_sparse=True, pval_threshold=1e-05, maf_threshold=0.05, 

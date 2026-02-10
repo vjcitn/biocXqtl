@@ -8,7 +8,8 @@ tq_xexp_trans(
   xexp,
   pval_threshold = 1e-05,
   maf_threshold = 0.05,
-  batch_size = 20000L
+  batch_size = 20000L,
+  useINT = FALSE
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ tq_xexp_trans(
 \item{maf_threshold}{numeric(1) defaults to 0.05}
 
 \item{batch_size}{numeric(1) defaults to 20000}
+
+\item{useINT}{logical, if TRUE, apply inverse normal transformation to all features}
 }
 \description{
 tq_xexp_trans runs tensorqtl map_trans on components from an XqtlExperiment instance
@@ -29,6 +32,11 @@ td = tempdir()
 sexn = ifelse(colData(nn)$sex == "XY", 0., 1.)
 colData(nn) = NULL
 nn$sex = sexn
+Sys.setenv(OMP_NUM_THREADS = 1)  # these seem important for avoiding crash in macos
+Sys.setenv(OPENBLAS_NUM_THREADS = 1)
+Sys.setenv(MKL_NUM_THREADS = 1)
 lk = tq_xexp_trans(nn, maf_threshold=.01, pval_threshold=1e-4)
 head(lk)
+lkint = tq_xexp_trans(nn, maf_threshold=.01, pval_threshold=1e-4, useINT=TRUE)
+head(lkint)
 }
