@@ -34,13 +34,15 @@ xexp2dfs = function(xexp, useINT=FALSE) {
 #' @param write_parquet_path path to folder used for output, defaults to `tempdir()`
 #' @param useINT logical, if TRUE, compute inverse normal transform for each feature
 #' @examples
-#' example(XqtlExperiment) # makes nn
-#' td = tempdir()
-#' sexn = ifelse(colData(nn)$sex == "XY", 0., 1.)
-#' colData(nn) = NULL
-#' nn$sex = sexn
-#' tq_xexp_cis(nn, prefix="example_tq", write_parquet_path=td)
-#' dir(td, full=TRUE)
+#' if (interactive()) {  # segfaults on mac in CHECK
+#'  example(XqtlExperiment) # makes nn
+#'  td = tempdir()
+#'  sexn = ifelse(colData(nn)$sex == "XY", 0., 1.)
+#'  colData(nn) = NULL
+#'  nn$sex = sexn
+#'  tq_xexp_cis(nn, prefix="example_tq", write_parquet_path=td)
+#'  dir(td, full=TRUE)
+#' }
 #' @export
 tq_xexp_cis = function(xexp, window=1000000L, maf_threshold=0, prefix = "tqrun",
     write_parquet_path = tempdir(), useINT=FALSE) {

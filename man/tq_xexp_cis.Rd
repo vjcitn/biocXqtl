@@ -30,11 +30,13 @@ tq_xexp_cis(
 tq_xexp_cis runs tensorqtl cis.map_nominal on components from an XqtlExperiment instance
 }
 \examples{
-example(XqtlExperiment) # makes nn
-td = tempdir()
-sexn = ifelse(colData(nn)$sex == "XY", 0., 1.)
-colData(nn) = NULL
-nn$sex = sexn
-tq_xexp_cis(nn, prefix="example_tq", write_parquet_path=td)
-dir(td, full=TRUE)
+if (interactive()) {  # segfaults on mac in CHECK
+ example(XqtlExperiment) # makes nn
+ td = tempdir()
+ sexn = ifelse(colData(nn)$sex == "XY", 0., 1.)
+ colData(nn) = NULL
+ nn$sex = sexn
+ tq_xexp_cis(nn, prefix="example_tq", write_parquet_path=td)
+ dir(td, full=TRUE)
+}
 }
