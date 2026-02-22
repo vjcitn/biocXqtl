@@ -139,6 +139,11 @@ tq_xexp_trans = function(xexp, pval_threshold=1e-5, maf_threshold=0.05, batch_si
  transtab = trans$map_trans(conv$genotype_df, conv$phenotype_df, conv$covariates_df,
     pval_threshold=pval_threshold, maf_threshold=maf_threshold,
     batch_size=batch_size)
+# seems necessitated by reticulate update?
+ if (inherits(transtab$variant_id, "pandas.arrays.ArrowStringArray"))
+      transtab$variant_id = transtab$variant_id$to_numpy()
+ if (inherits(transtab$phenotype_id, "pandas.arrays.ArrowStringArray"))
+      transtab$phenotype_tid = transtab$phenotype_id$to_numpy()
  transtab = add_loc_trans(xexp=xexp, trout=transtab)
  transtab
 }
