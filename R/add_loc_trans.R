@@ -1,5 +1,5 @@
 #' utility to add annotation to trans results
-#' @importFrom dplyr left_join mutate select filter
+#' @importFrom dplyr left_join mutate select filter inner_join
 #' @param xexp XqtlExperiment instance
 #' @param trout output of trans.map_trans
 #' @return data.frame instance with variant and phenotype feature annotation as

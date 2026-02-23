@@ -1,4 +1,5 @@
 #' inverse normal transformation
+#' @importFrom stats qnorm
 #' @param x matrix for which rows are to be transformed
 #' @examples
 #' m = matrix(rbeta(2000,2,1),4,500)
