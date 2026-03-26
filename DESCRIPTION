@@ -1,6 +1,6 @@
 Package: biocXqtl
 Title: modular system for creating molecular QTL statistics
-Version: 0.0.32
+Version: 0.0.33
 Authors@R:
     person(given = "Vince",
            family = "Carey",
