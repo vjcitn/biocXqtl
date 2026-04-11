@@ -61,6 +61,7 @@ tq_xexp_cis = function(xexp, window=1000000L, maf_threshold=0, prefix = "tqrun",
  fp = reticulate::import("fastparquet")  # needed?
  reticulate::py_require("pyarrow")
  pd = reticulate::import("pandas")
+ Sys.setenv(OMP_NUM_THREADS = "1", OPENBLAS_NUM_THREADS = "1", MKL_NUM_THREADS = "1")
  tor = reticulate::import("torch")
  tq = reticulate::import("tensorqtl")
  cis = reticulate::import("tensorqtl.cis")
@@ -117,6 +118,7 @@ tq_xexp_trans = function(xexp, pval_threshold=1e-5, maf_threshold=0.05, batch_si
  fp = reticulate::import("fastparquet")  # needed?
  reticulate::py_require("pyarrow")
  pd = reticulate::import("pandas")
+ Sys.setenv(OMP_NUM_THREADS = "1", OPENBLAS_NUM_THREADS = "1", MKL_NUM_THREADS = "1")
  tor = reticulate::import("torch")
  tq = reticulate::import("tensorqtl")
  trans = reticulate::import("tensorqtl.trans")
