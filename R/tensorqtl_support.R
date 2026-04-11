@@ -95,9 +95,6 @@ tq_xexp_cis = function(xexp, window=1000000L, maf_threshold=0, prefix = "tqrun",
 #' sexn = ifelse(colData(nn)$sex == "XY", 0., 1.)
 #' colData(nn) = NULL
 #' nn$sex = sexn
-#' Sys.setenv(OMP_NUM_THREADS = 1)  # these seem important for avoiding crash in macos
-#' Sys.setenv(OPENBLAS_NUM_THREADS = 1)
-#' Sys.setenv(MKL_NUM_THREADS = 1)
 #' lk = tq_xexp_trans(nn, maf_threshold=.01, pval_threshold=1e-4)
 #' head(lk)
 #' lkint = tq_xexp_trans(nn, maf_threshold=.01, pval_threshold=1e-4, useINT=TRUE)
