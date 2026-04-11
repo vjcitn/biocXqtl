@@ -55,6 +55,7 @@ tq_xexp_cis = function(xexp, window=1000000L, maf_threshold=0, prefix = "tqrun",
  reticulate::py_require("pandas==2.3.3")  # discovered on linux
  reticulate::py_require("pandas_plink==2.3.1")
  reticulate::import("pandas_plink") # needed?
+ Sys.setenv(KMP_DUPLICATE_LIB_OK="TRUE")  # avoid libomp conflict on macOS
  reticulate::py_require("torch")
  reticulate::py_require("pyarrow")
  reticulate::py_require("fastparquet")
@@ -114,6 +115,7 @@ tq_xexp_trans = function(xexp, pval_threshold=1e-5, maf_threshold=0.05, batch_si
  reticulate::py_require("pandas==2.3.3")
  reticulate::py_require("pandas_plink==2.3.1")
  reticulate::import("pandas_plink") # needed?
+ Sys.setenv(KMP_DUPLICATE_LIB_OK="TRUE")  # avoid libomp conflict on macOS
  reticulate::py_require("torch")
  reticulate::py_require("pyarrow")
  reticulate::py_require("fastparquet")
