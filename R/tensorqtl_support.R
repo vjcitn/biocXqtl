@@ -63,7 +63,6 @@ tq_xexp_cis = function(xexp, window=1000000L, maf_threshold=0, prefix = "tqrun",
  pd = reticulate::import("pandas")
  tor = reticulate::import("torch")
  tq = reticulate::import("tensorqtl")
- dev = tor$device("cuda")
  cis = reticulate::import("tensorqtl.cis")
 
  if (isTRUE(options()$verbose))  print(reticulate::py_config())
@@ -123,7 +122,6 @@ tq_xexp_trans = function(xexp, pval_threshold=1e-5, maf_threshold=0.05, batch_si
  pd = reticulate::import("pandas")
  tor = reticulate::import("torch")
  tq = reticulate::import("tensorqtl")
- dev = tor$device("cuda")
  trans = reticulate::import("tensorqtl.trans")
 
  if (isTRUE(options()$verbose))  print(reticulate::py_config())
