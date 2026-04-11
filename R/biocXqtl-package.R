@@ -6,3 +6,9 @@
 #' @importFrom Rcpp sourceCpp
 ## usethis namespace: end
 NULL
+
+# Set before any OpenMP-linked library (e.g. torch via tensorqtl) is imported,
+# to avoid "libomp already initialized" abort on macOS.
+.onLoad = function(libname, pkgname) {
+  Sys.setenv(KMP_DUPLICATE_LIB_OK = "TRUE")
+}
